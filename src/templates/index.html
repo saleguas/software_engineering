@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <!-- make an html form that accepts an input equation and a result box for flask-->
+    <form action="/" method="post">
+        <input type="text" name="equation" placeholder="Enter an equation">
+        <input type="submit" name="submit" value="Calculate">
+    </form>
+
+    <!-- make an output area for flask-->
+    <h1 id="result">Result: {{data.result}}</h1>
+    
+    
+</body>
+</html>
