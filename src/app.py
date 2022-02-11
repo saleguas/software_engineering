@@ -3,8 +3,9 @@ import os, sys
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 
 sys.path.append(os.path.abspath('.'))
+sys.path.append(os.path.abspath('core'))
 
-from core.equation_solver import solve_equation
+from equation_solver import solve_equation
 
 app = Flask(__name__)
 
