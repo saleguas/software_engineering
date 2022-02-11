@@ -1,19 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <!-- make an html form that accepts an input equation and a result box for flask-->
-    <form action="/" method="post">
-        <input type="text" name="equation" placeholder="Enter an equation">
-        <input type="submit" name="submit" value="Calculate">
-    </form>
+<!doctype html>
 
-    <!-- make an output area for flask-->
-    <h1 id="result">Result: {{data.result}}</h1>
-    
-    
-</body>
+<html>
+	<head>
+		<meta charset = "utf-8"/>
+		<title> Wolfram Delta Omicron </title>
+	</head>
+	<body>
+		<h1> Welcome to Wolfram Delta Omicron </h1> <br>
+		<form id = "input">
+			<input type = "text" name = "equation">
+			<input type = "submit" value = "solve">
+			<input type = "button" id = "reset" value = "reset">
+		</form>
+		<h2 id = "output header"> </h2>
+		<p id = "output"> </p>
+		<p> Andrew is cool </p>
+		<script src = "script.js"> </script>
+	</body>
 </html>
