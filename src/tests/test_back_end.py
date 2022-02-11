@@ -2,9 +2,10 @@ import sys, os
 
 sys.path.append(os.path.abspath('.'))
 sys.path.append(os.path.abspath('..'))
+sys.path.append(os.path.abspath('../core/'))
 
 from src.app import app
-from src.core import equation_solver
+import equation_solver
 
 def test_preprocess_equation():
     res1 = equation_solver.solve_equation('3x = 9')
