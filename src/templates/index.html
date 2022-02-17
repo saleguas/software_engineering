@@ -1,0 +1,88 @@
+<!doctype html>
+
+<html>
+	<head>
+		<!-- idk why this not working so andrew, try to get it to work plz-->
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<style>
+			body{
+				background-color: black;
+			}
+			h1 {
+				color:white;
+			}
+			#app-bar {
+				text-align: left;
+				font-weight: bold;
+				background-color: transparent;
+			}
+			#equation-form {
+				width: 90%;
+				height: 50em;
+				background-color: red;
+
+				position: absolute;
+				top:0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				margin: auto;
+			}
+			#form-submit {
+				text-align: center;
+				margin:10px
+			}
+			input[type=text], select {
+				width: 70%;
+				padding: 12px 20px;
+				margin: 8px 0;
+				display: inline-block;
+				border: 1px solid #ccc;
+				border-radius: 4px;
+				box-sizing: border-box;
+				font-size: 20px;
+			}
+			input[type=submit]{
+				margin-left: 10px;
+				width:20%;
+				height:50px;
+				font-size: 20px;
+				border-radius: 20px;
+			}
+			input[type=button] {
+				margin-top: 30px;
+				width:100%;
+				height:50px
+			}
+		</style>
+		<meta charset = "utf-8"/>
+		<title> Wolfram Delta Omicron </title>
+	</head>
+	<body>
+		<div id="app-bar">
+			<h1> Welcome to Wolfram Delta Omicron </h1>
+		</div>
+		<div id="equation-form">
+			<div id="form-submit">
+				<h1>Enter your equation</h1>
+				<form action="/" method="post">
+					<div id ="equation-inputs">
+						<input type = "text" name = "equation">
+						<input type = "submit" value = "solve">
+					</div>
+					<input type = "button" id = "reset" value = "reset">
+				</form>
+				<div>
+					<h1>Solution</h1>
+					<input type = "radio" name = "solution length" value = "simple"> simple
+					<input type = "radio" name = "solution length" value = "full"> full
+					<h1>{Result would go here}</h1>
+				</div>
+				<h2 id = "output header"> </h2>
+				<p id = "output"> </p>
+				<p> Andrew/Jeff is cool </p>
+				<script src = "main.js"> </script>
+			</div>
+		</div>
+	</body>
+</html>
