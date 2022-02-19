@@ -2,8 +2,9 @@
 import os, sys
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 
-sys.path.append(os.path.abspath('.'))
-sys.path.append(os.path.abspath('core'))
+sys.path.append(os.path.join(os.path.dirname(__file__)))
+sys.path.append(os.path.join(os.path.dirname(__file__), "core"))
+
 
 from equation_solver import solve_equation
 

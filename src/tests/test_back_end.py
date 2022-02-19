@@ -1,8 +1,8 @@
 import sys, os
 
-sys.path.append(os.path.abspath('.'))
-sys.path.append(os.path.abspath('..'))
-sys.path.append(os.path.abspath('../core'))
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "core"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "tests"))
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from app import app
 from core import equation_solver

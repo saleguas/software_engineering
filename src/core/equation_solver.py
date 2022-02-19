@@ -1,6 +1,5 @@
 from sympy import *
 
-
 def preprocess_equation(eq):
     for i in range(1, len(eq)):
         # check if there is a number right before a variable and replace it with a symbol
