@@ -1,31 +1,31 @@
-let filepath = document.location.href;
-let dataIndex = filepath.indexOf("?equation="); //index where the data starts
+//get HTML elements
 let input = document.getElementById("input");
 let outputHeader = document.getElementById("output header");
 let output = document.getElementById("output");
 let resetBtn = document.getElementById("reset");
 let length = document.getElementById("solution length");
+let fullExplanation = document.getElementById("full explanation").innerHTML;
+let simpleExplanation = document.getElementById("simple explanation").innerHTML;
 
-let fullSolution = "full solution goes here";
-let simpleSolution = "simple solution goes here";
-
-if (dataIndex != -1 && filepath.length > dataIndex + 10) {
+if (fullExplanation.trim() != "") {
 	//if there is an equation specified...
 	outputHeader.innerHTML = "Solution";
-	output.innerHTML = fullSolution;
-	//length.elements["solution length"].value = "full";
+	output.innerHTML = fullExplanation;
 }
 
 resetBtn.onclick = function() {
-	input.elements["equation"].value = "";
-	input.submit();
+	fullExplanation = "";
+	simpleExplanation = "";
+	outputHeader.innerHTML = "";
+	output.innerHTML = "";
+	length.reset();
 }
 
 length.onchange = function() {
-	if (dataIndex != -1 && filepath.length > dataIndex + 10) {
+	if (fullExplanation.trim() != "") {
 		if (length.elements["solution length"].value == "full")
-			output.innerHTML = fullSolution;
+			output.innerHTML = fullExplanation;
 		else
-			output.innerHTML = simpleSolution;
+			output.innerHTML = simpleExplanation;
 	}
 }

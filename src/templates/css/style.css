@@ -4,3 +4,52 @@
     background-color: aquamarine;
     font-size: 400px;
 }
+body{
+	background-color: black;
+}
+h1 {
+	color:white;
+}
+#app-bar {
+	text-align: left;
+	font-weight: bold;
+	background-color: transparent;
+}
+#input {
+	width: 90%;
+	height: 50em;
+	background-color: red;
+
+	position: absolute;
+	top:0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+}
+#form-submit {
+	text-align: center;
+	margin:10px
+}
+input[type=text], select {
+	width: 80%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+	font-size: 20px;
+}
+input[type=submit]{
+	margin-left: 10px;
+	width:15%;
+	height:50px;
+	font-size: 20px;
+	border-radius: 20px;
+}
+input[type=button] {
+	margin-top: 30px;
+	width:95%;
+	height:50px
+}
