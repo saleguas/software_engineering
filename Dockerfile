@@ -33,11 +33,11 @@ COPY ./requirements.txt /app/requirements.txt
 ADD ./src /app/src
 
 ENV PYTHONPATH "${PYTHONPATH}:/app/src"
-
+ENV FLASK_APP "/app/src/app.py"
+ENV FLASK_ENV "development"
 EXPOSE 5000
-WORKDIR /app
-RUN pip3 install -r requirements.txt
+WORKDIR /app/src
+RUN pip3 install -r ../requirements.txt
 
-
-# CMD ["flask", "run", "--host=0.0.0.0", "--port=5000" ]
-CMD ["python", "app.py" ]
+CMD ["flask", "run", "--host=0.0.0.0", "--port=5000" ]
+# CMD ["python", "app.py" ]
