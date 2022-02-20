@@ -38,6 +38,17 @@ jobs:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
           command: pytest
+  containerize:
+    environment:
+      IMAGE_NAME: saleguas/wolframomicrondelta
+    docker:
+      - image: cimg/python:3.10.2
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker Image
+          command: docker build -t $IMAGE_NAME:latest .
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -45,4 +56,5 @@ workflows:
   sample: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     jobs:
-      - build-and-test
+      - containerize
+#      - build-and-test
