@@ -88,3 +88,20 @@ class Multiply(Function):
         # combine powers
         self.combine_powers()
 
+    def is_linear(self):
+        if len(self.factors) == 1:
+            return self.factors[0].is_linear()
+        if len(self.factors) == 2:
+            if isinstance(self.factors[0], Constant) and isinstance(self.factors[1], SimplePower):
+                return self.factors[1].is_linear()
+            elif isinstance(self.factors[1], Constant) and isinstance(self.factors[0], SimplePower):
+                return self.factors[0].is_linear()
+        return len(self.factors) == 0
+
+    def to_string(self):
+        string = ""
+        for i in range(len(self.factors)):
+            string += self.factors[i].to_string()
+            if i != len(self.factors) - 1:
+                string += "*"
+        return string
