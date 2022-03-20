@@ -59,15 +59,15 @@ class Add(Function):
         # delete simple power functions and multiply functions with constant * power
         self.addends = [addend for addend in self.addends if not (isinstance(addend, SimplePower) or
                                                                   (isinstance(addend, Multiply) and (
-                                                                              ((isinstance(addend.factors[0], int) or
-                                                                                isinstance(addend.factors[0],
-                                                                                           float)) and
-                                                                               isinstance(addend.factors[1],
-                                                                                          SimplePower)) or
-                                                                              ((isinstance(addend.factors[1], int) or
-                                                                                isinstance(addend.factors[1], float))
-                                                                               and isinstance(addend.factors[0],
-                                                                                              SimplePower)))))]
+                                                                          ((isinstance(addend.factors[0], int) or
+                                                                            isinstance(addend.factors[0],
+                                                                                       float)) and
+                                                                           isinstance(addend.factors[1],
+                                                                                      SimplePower)) or
+                                                                          ((isinstance(addend.factors[1], int) or
+                                                                            isinstance(addend.factors[1], float))
+                                                                           and isinstance(addend.factors[0],
+                                                                                          SimplePower)))))]
 
         # append simplified power functions.
         for term in terms:
@@ -78,3 +78,19 @@ class Add(Function):
 
     def simplify(self):
         self.combine_like_terms()
+
+    # An add function is linear if each term is constant or a multiply times a simple power with power 1
+    # Multiply functions must be simplified
+    def is_linear(self):
+        for addend in self.addends:
+            if not addend.is_linear():
+                return False
+        return True
+
+    def to_string(self):
+        string = ""
+        for i in range(len(self.addends)):
+            string += self.addends[i].to_string()
+            if i != len(self.addends) - 1:
+                string += " + "
+        return string
