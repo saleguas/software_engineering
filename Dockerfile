@@ -35,9 +35,9 @@ ADD ./src /app/src
 ENV PYTHONPATH "${PYTHONPATH}:/app/src"
 ENV FLASK_APP "/app/src/app.py"
 ENV FLASK_ENV "development"
-EXPOSE 5000
+EXPOSE 8501
 WORKDIR /app/src
 RUN pip3 install -r ../requirements.txt
 
-CMD ["flask", "run", "--host=0.0.0.0", "--port=5000" ]
-# CMD ["python", "app.py" ]
+CMD ["streamlit", "run", "app.py"]
+# CMD ["streamlit", "run", app.py" ]
