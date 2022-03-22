@@ -4,7 +4,8 @@ from Variable import Variable
 
 class SimplePower(Power):
     def __init__(self, base: str, power):
-        super().__init__(Variable(base), power)
+        self.base = Variable(base)
+        super().__init__(self.base, power)
 
     def evaluate(self, x: float):
         return x ** self.power
