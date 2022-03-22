@@ -39,5 +39,5 @@ EXPOSE 8501
 WORKDIR /app/src
 RUN pip3 install -r ../requirements.txt
 
-CMD ["streamlit", "run", "app.py"]
+CMD ["streamlit", "run", "app.py", "--theme.base", "dark"]
 # CMD ["streamlit", "run", app.py" ]
