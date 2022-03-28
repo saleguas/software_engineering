@@ -46,9 +46,10 @@ class Multiply(Function):
         #         self.factors.pop(factor_index)
 
         # determine new constant and insert it into self.factors
-        new_constant = Constant(1)
+        new_constant = 1
         for constant in constants:
-            new_constant *= Constant(constant)
+            new_constant *= constant
+        new_constant = Constant(new_constant)
         self.factors.insert(0, new_constant)
 
     # combine power functions

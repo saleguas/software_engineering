@@ -24,7 +24,13 @@ def remove_nesting(function):
     if isinstance(function, Multiply):
         if len(function.factors) == 1:
             return function.factors[0]
+        else:
+            for i in range(len(function.factors)):
+                function.factors[i] = remove_nesting(function.factors[i])
     if isinstance(function, Add):
         if len(function.addends) == 1:
             return function.addends[0]
+        else:
+            for i in range(len(function.addends)):
+                function.addends[i] = remove_nesting(function.addends[i])
     return function
