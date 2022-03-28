@@ -1,3 +1,9 @@
+import sys, os
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "core"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "tests"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "custom_equation_solver"))
+
 from Function import Function
 from Constant import Constant
 from Variable import Variable
