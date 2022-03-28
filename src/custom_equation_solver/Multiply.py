@@ -51,7 +51,7 @@ class Multiply(Function):
             new_constant *= Constant(constant)
         self.factors.insert(0, new_constant)
 
-    #combine power functions
+    # combine power functions
     def combine_powers(self):
         # key: base; value: list of indexes of the powers for the given base
         power_bases = {}

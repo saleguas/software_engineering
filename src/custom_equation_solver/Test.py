@@ -1,9 +1,3 @@
-import sys, os
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "core"))
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "tests"))
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "custom_equation_solver"))
-
 from Function import Function
 from Constant import Constant
 from Variable import Variable
@@ -115,13 +109,11 @@ def test_distribute():
     # print(function.to_string())
 
 # need to automate
-"""
-def test_solve_linear_3():
-    right_function = Constant(10)
-    left_function = Multiply([Constant(2), Add([Multiply([Constant(2), SimplePower("x", Constant(1))]), Constant(4)])])
-    equation = Equation(left_function, right_function)
-    solution, steps = equation.solve_linear()
-    print(solution)
-    for step in steps:
-        print(step)
-"""
+# def test_solve_linear_3():
+#    right_function = Constant(10)
+#    left_function = Multiply([Constant(2), Add([Multiply([Constant(2), SimplePower("x", Constant(1))]), Constant(4)])])
+#    equation = Equation(left_function, right_function)
+#    solution, steps = equation.solve_linear()
+#    print(solution)
+#    for step in steps:
+#        print(step)

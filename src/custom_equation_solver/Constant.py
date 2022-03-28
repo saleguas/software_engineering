@@ -10,3 +10,6 @@ class Constant(Function, float):
 
     def to_string(self):
         return str(self)
+
+    def simplify(self):
+        return self
