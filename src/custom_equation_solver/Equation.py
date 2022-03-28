@@ -4,6 +4,7 @@ from Constant import Constant
 from Add import Add
 from Multiply import Multiply
 from SimplePower import SimplePower
+from StaticFunctions import *
 
 
 class Equation:
@@ -16,6 +17,25 @@ class Equation:
 
     # Returns the solution or true or false is there are infinitely many or no solutions
     def solve_linear(self):
+        steps = []
+        # Simplify (distribute and combine like terms)
+        """self.left_function.simplify()
+        self.right_function.simplify()
+        steps += "If applicable, simplify both sides of the equation using the distributive property. Then," \
+                 "combine like terms: " + self.left_function.to_string() + " = " + self.right_function.to_string()"""
+
+        self.left_function = distribute(self.left_function)
+        self.right_function = distribute(self.right_function)
+        steps += "If applicable, apply the distributive property, yielding " + self.left_function.to_string() + " = " +\
+                 self.right_function.to_string()
+        self.left_function.simplify()
+        self.right_function.simplify()
+
+        self.left_function = remove_nesting(self.left_function)
+        self.right_function = remove_nesting(self.right_function)
+        steps += "If applicable, simplify, yielding " + self.left_function.to_string() + " = " +\
+                 self.right_function.to_string()
+
         # case 1: Both sides are constant
         if isinstance(self.left_function, Constant) and isinstance(self.right_function, Constant):
             if self.left_function == self.right_function:
@@ -43,7 +63,7 @@ class Equation:
                     return False, ["ERROR"]
             left_side_1 = self.left_function - constant
             left_side_2 = left_side_1/slope
-            steps = ["Subtract " + constant.to_string() + " from both sides of the equation, yielding " +
+            steps += ["Subtract " + constant.to_string() + " from both sides of the equation, yielding " +
                      self.left_function.to_string() + " - " + constant.to_string() + " = " +
                      self.right_function.to_string() + " - " + constant.to_string() + ".",
                      "Simplify: " + str(left_side_1) +  " = " + slope.to_string() + "*" + variable.to_string() + ".",
@@ -51,23 +71,6 @@ class Equation:
                      " = (" + slope.to_string() + variable.to_string() + ")/" + slope.to_string() + ".",
                      "Simplify: " + str(left_side_2) + " = " + variable.to_string()]
             return left_side_2, steps
-
-            # # case a: mx + b
-            # if isinstance(self.right_function.addends[0], Multiply) and\
-            #         isinstance(self.right_function.addends[1], Constant):
-            #     # case i: mx
-            #     if isinstance(self.right_function.addends[0].factors[0], Constant) and\
-            #         isinstance(self.right_function.addends[0].factors[1], SimplePower):
-            #     # case ii: xm
-            #     elif isinstance(self.right_function.addends[0].factors[1], Constant) and\
-            #         isinstance(self.right_function.addends[0].factors[0], SimplePower):
-            #
-            #     #case iii: neither
-            #     else:
-            #         return False
-            # # case b: b + mx
-            # elif isinstance(self.right_function.addends[1], Multiply) and\
-            #         isinstance(self.right_function.addends[0], Constant):
 
         # case 3: Right side is constant
         elif isinstance(self.left_function, Add) and isinstance(self.right_function, Constant) and \
@@ -99,6 +102,7 @@ class Equation:
                      str(right_side_1) + "/" + slope.to_string() + ".",
                      "Simplify: " + variable.to_string() + " = " + str(right_side_2)]
             return right_side_2, steps
+
         # case 4: Neither side is constant
         elif isinstance(self.left_function, Add) and isinstance(self.right_function, Add) and \
                 len(self.left_function.addends) == 2 and len(self.right_function.addends) == 2:
