@@ -79,6 +79,12 @@ class Add(Function):
     def simplify(self):
         self.combine_like_terms()
 
+        self.addends = [a for a in self.addends if a != 0]
+
+        for addend in self.addends:
+            if isinstance(addend, Multiply):
+                addend.simplify()
+
     # An add function is linear if each term is constant or a multiply times a simple power with power 1
     # Multiply functions must be simplified
     def is_linear(self):

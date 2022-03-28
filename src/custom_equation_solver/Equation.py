@@ -30,7 +30,6 @@ class Equation:
                  self.right_function.to_string()
         self.left_function.simplify()
         self.right_function.simplify()
-
         self.left_function = remove_nesting(self.left_function)
         self.right_function = remove_nesting(self.right_function)
         steps += "If applicable, simplify, yielding " + self.left_function.to_string() + " = " +\
