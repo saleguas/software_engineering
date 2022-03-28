@@ -115,6 +115,7 @@ def test_distribute():
     # print(function.to_string())
 
 # need to automate
+"""
 def test_solve_linear_3():
     right_function = Constant(10)
     left_function = Multiply([Constant(2), Add([Multiply([Constant(2), SimplePower("x", Constant(1))]), Constant(4)])])
@@ -123,3 +124,4 @@ def test_solve_linear_3():
     print(solution)
     for step in steps:
         print(step)
+"""
