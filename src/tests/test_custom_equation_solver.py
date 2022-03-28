@@ -14,6 +14,7 @@ from Multiply import Multiply
 from Add import Add
 from Equation import Equation
 import pytest
+from StaticFunctions import *
 
 
 def test_multiply_combine_constants():
@@ -84,18 +85,39 @@ def test_add_combine_like_terms():
         else:
             assert 0 == 1
 
+
 def test_solve_linear():
     left_function = Constant(10)
     right_function = Add([Multiply([Constant(2), SimplePower("x", Constant(1))]), Constant(4)])
+    equation = Equation(left_function, right_function)
+    solution, steps = equation.solve_linear()
+    assert solution == 3.0
+    print(solution)
+    for step in steps:
+        print(step)
+
+
+def test_solve_linear_2():
+    right_function = Constant(10)
+    left_function = Add([Multiply([Constant(2), SimplePower("x", Constant(1))]), Constant(4)])
     equation = Equation(left_function, right_function)
     solution, steps = equation.solve_linear()
     print(solution)
     for step in steps:
         print(step)
 
-def test_solve_linear_2():
+
+# need to automate
+def test_distribute():
+    function = Multiply([5, Add([SimplePower("x", 1), 2])])
+    function = distribute(function)
+    print("hi")
+    # print(function.to_string())
+
+# need to automate
+def test_solve_linear_3():
     right_function = Constant(10)
-    left_function = Add([Multiply([Constant(2), SimplePower("x", Constant(1))]), Constant(4)])
+    left_function = Multiply([Constant(2), Add([Multiply([Constant(2), SimplePower("x", Constant(1))]), Constant(4)])])
     equation = Equation(left_function, right_function)
     solution, steps = equation.solve_linear()
     print(solution)
