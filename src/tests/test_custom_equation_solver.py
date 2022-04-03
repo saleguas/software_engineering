@@ -92,7 +92,6 @@ def test_solve_linear():
     equation = Equation(left_function, right_function)
     solution, steps = equation.solve_linear()
     assert solution == 3.0
-    print(solution)
     for step in steps:
         print(step)
 
@@ -102,26 +101,48 @@ def test_solve_linear_2():
     left_function = Add([Multiply([Constant(2), SimplePower("x", Constant(1))]), Constant(4)])
     equation = Equation(left_function, right_function)
     solution, steps = equation.solve_linear()
-    print(solution)
+    assert solution == 3
     for step in steps:
         print(step)
 
+def test_linear_equation_with_like_terms():
+    left_function = Add([Multiply([Constant(3), SimplePower("x", Constant(1))]), Constant(0)])
+    right_function = Add([Multiply([Constant(1), SimplePower("x", Constant(1))]), Constant(4)])
+    equation = Equation(left_function, right_function)
+    solution, steps = equation.solve_linear()
+    for step in steps:
+        print(step)
+    assert solution == 2
 
-# need to automate
+def test_linear_equation_with_like_terms_2():
+    left_function = Multiply([Constant(3), SimplePower("x", Constant(1))])
+    right_function = Add([SimplePower("x", Constant(1)), Constant(4)])
+    equation = Equation(left_function, right_function)
+    solution, steps = equation.solve_linear()
+    for step in steps:
+        print(step)
+    assert solution == 2
+
+def test_linear_equation_with_distribution():
+    left_function = Constant(15)
+    right_function = Multiply([Add([SimplePower("x", Constant(1)), Constant(2)]), Constant(3)])
+    equation = Equation(left_function, right_function)
+    solution, steps = equation.solve_linear()
+    for step in steps:
+        print(step)
+    assert solution == 3
+
 def test_distribute():
-    function = Multiply([5, Add([SimplePower("x", 1), 2])])
+    function = Multiply([Constant(5), Add([SimplePower("x", 1), Constant(2)])])
     function = distribute(function)
-    print("hi")
-    # print(function.to_string())
+    assert function.to_string() == "5.0*x + 5.0*2.0"
 
-# need to automate
-"""
 def test_solve_linear_3():
     right_function = Constant(10)
     left_function = Multiply([Constant(2), Add([Multiply([Constant(2), SimplePower("x", Constant(1))]), Constant(4)])])
     equation = Equation(left_function, right_function)
     solution, steps = equation.solve_linear()
-    print(solution)
+    assert solution == 0.5
     for step in steps:
         print(step)
-"""
+

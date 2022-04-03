@@ -1,5 +1,7 @@
 from Multiply import Multiply
 from Add import Add
+from Constant import Constant
+from SimplePower import SimplePower
 
 
 def distribute(function):
@@ -33,4 +35,22 @@ def remove_nesting(function):
         else:
             for i in range(len(function.addends)):
                 function.addends[i] = remove_nesting(function.addends[i])
+    return function
+
+
+def standardize_linear_format(function):
+    if not function.is_linear():
+        return None
+    if isinstance(function, Add):
+        # return Add([standardize_linear_format(addend) for addend in function.addends])
+        for i in range(len(function.addends)):
+            if isinstance(function.addends[i], SimplePower):
+                function.addends[i] = Multiply([function.addends[i], Constant(1)])
+    if isinstance(function, Multiply) and len(function.factors) == 1:
+        return Add([Multiply([function.factors[0], Constant(1)]), Constant(0)])
+    if isinstance(function, Multiply) and len(function.factors) == 2:
+        return Add([function, Constant(0)])
+    if isinstance(function, SimplePower):
+        return Add([Multiply([function, Constant(1)]), Constant(0)])
+
     return function
