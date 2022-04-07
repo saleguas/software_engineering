@@ -146,3 +146,10 @@ def test_solve_linear_3():
     for step in steps:
         print(step)
 
+def test_parse_string_1():
+    test_input = "2*x +3 = 10"
+    parsed_function = parse_string(test_input)
+    solution, steps = parsed_function.solve_linear()
+    assert solution == 3.5
+    assert True
+
