@@ -153,3 +153,102 @@ def test_parse_string_1():
     solution, steps = parsed_function.solve_linear()
     assert solution == 3.5
     assert True
+
+
+def test_parse_string_many_spaces():
+    passed = None
+    try:
+        test_input = "2 * x + 4 = 10"
+        parsed_function = parse_string(test_input)
+        solution, steps = parsed_function.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 3
+
+
+def test_parse_string_already_valid():
+    passed = None
+    try:
+        test_input = "2*x+4=10"
+        parsed_function = parse_string(test_input)
+        solution, steps = parsed_function.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 3
+
+
+def test_parse_string_expression_only():
+    passed = None
+    try:
+        test_input = "2*x+3"
+        parsed_function = parse_string(test_input)
+        passed = True
+    except:
+        passed = False
+    assert passed == False
+
+
+def test_parse_string_two_variables():
+    passed = None
+    try:
+        test_input = "x+y=5"
+        parsed_function = parse_string(test_input)
+        passed = True
+    except:
+        passed = False
+    assert passed == False
+
+
+def test_parse_string_works_when_user_is_on_acid():
+    passed = None
+    try:
+        test_input = "2*x#+4&=10_"
+        parsed_function = parse_string(test_input)
+        solution, steps = parsed_function.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 3
+
+
+def test_parse_function_works_with_parentheses():
+    passed = None
+    try:
+        test_input = "2*(x+3)+5=15"
+        parsed_function = parse_string(test_input)
+        solution, steps = parsed_function.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 2
+
+
+def test_parse_function_like_terms():
+    passed = None
+    try:
+        test_input = "3*x+4=x+10"
+        parsed_function = parse_string(test_input)
+        solution, steps = parsed_function.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 3
+
+
+def test_parse_function_equals_sign_in_parentheses():
+    passed = None
+    try:
+        test_input = "2*x+(4=10)"
+        parsed_function = parse_string(test_input)
+        solution, steps = parsed_function.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == False
