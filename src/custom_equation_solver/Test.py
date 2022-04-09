@@ -242,6 +242,18 @@ def test_parse_function_like_terms():
     assert solution == 3
 
 
+def test_parse_function_backwards_parentheses():
+    passed = None
+    try:
+        test_input = "2*x)+4(=10"
+        parsed_function = parse_string(test_input)
+        solution, steps = parsed_function.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == False
+
+
 def test_parse_function_equals_sign_in_parentheses():
     passed = None
     try:
@@ -252,3 +264,16 @@ def test_parse_function_equals_sign_in_parentheses():
     except:
         passed = False
     assert passed == False
+
+
+def test_parse_function_both_sides_in_parentheses():
+    passed = None
+    try:
+        test_input = "(2*x+4)=(7+3)"
+        parsed_function = parse_string(test_input)
+        solution, steps = parsed_function.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 3
