@@ -209,7 +209,7 @@ def test_parse_string_several_consecutive_spaces():
     except:
         passed = False
     assert passed == True
-    assert parsed_function.to_string() == "2*x+4=10"
+    assert parsed_function.to_string() == "2.0*x + 4.0 = 10.0"
 
 def test_parse_string_already_valid():
     passed = None
@@ -397,7 +397,7 @@ def test_is_linear_true_like_terms():
 
 def test_is_linear_false_but_seems_true():
     left_function = Constant(16)
-    right_function = Multiply([SimplePower("x", 1), SimplePower("x", 1)])
+    right_function = Multiply([SimplePower("x", 1), SimplePower("x", Constant(1))])
     equation = Equation(left_function, right_function)
     assert equation.is_linear() == False
 
@@ -405,24 +405,24 @@ def test_to_string_1():
     left_function = Constant(10)
     right_function = Add([Constant(4), Multiply([Constant(2), SimplePower("x", Constant(1))])])
     equation = Equation(left_function, right_function)
-    assert equation.to_string == "10=4+2*x"
+    assert equation.to_string() == "10=4+2*x"
 
 def test_to_string_2():
     left_function = Constant(17)
     right_function = Add([Multiply([Constant(5), SimplePower("x", Constant(1))]), Constant(7)])
     equation = Equation(left_function, right_function)
-    assert equation.to_string == "17=5*x+7"
+    assert equation.to_string() == "17=5*x+7"
 
 def test_solve_1():
     left_function = Constant(10)
     right_function = Add([Constant(4), Multiply([Constant(2), SimplePower("x", Constant(2))])])
     equation = Equation(left_function, right_function)
-    assert equation.solve() == None
+    assert equation.solve(SimplePower("x", Constant(1))) == None
 
 def test_solve_2():
     left_function = Constant(10)
     right_function = Add([Constant(4), Multiply([Constant(2), SimplePower("x", Constant(1))])])
     equation = Equation(left_function, right_function)
-    assert equation.solve() == 3
+    assert equation.solve(SimplePower("x", Constant(1))) == 3
 
 #6 solve linear tests were already written so they are above; the remaining 6 will be here
