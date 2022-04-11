@@ -13,8 +13,9 @@ from SimplePower import SimplePower
 from Multiply import Multiply
 from Add import Add
 from Equation import Equation
-import pytest
 from StaticFunctions import *
+import pytest
+
 
 
 def test_multiply_combine_constants():
@@ -105,6 +106,7 @@ def test_solve_linear_2():
     for step in steps:
         print(step)
 
+
 def test_linear_equation_with_like_terms():
     left_function = Add([Multiply([Constant(3), SimplePower("x", Constant(1))]), Constant(0)])
     right_function = Add([Multiply([Constant(1), SimplePower("x", Constant(1))]), Constant(4)])
@@ -113,6 +115,7 @@ def test_linear_equation_with_like_terms():
     for step in steps:
         print(step)
     assert solution == 2
+
 
 def test_linear_equation_with_like_terms_2():
     left_function = Multiply([Constant(3), SimplePower("x", Constant(1))])
@@ -123,6 +126,7 @@ def test_linear_equation_with_like_terms_2():
         print(step)
     assert solution == 2
 
+
 def test_linear_equation_with_distribution():
     left_function = Constant(15)
     right_function = Multiply([Add([SimplePower("x", Constant(1)), Constant(2)]), Constant(3)])
@@ -132,10 +136,12 @@ def test_linear_equation_with_distribution():
         print(step)
     assert solution == 3
 
+
 def test_distribute():
     function = Multiply([Constant(5), Add([SimplePower("x", 1), Constant(2)])])
     function = distribute(function)
     assert function.to_string() == "5.0*x + 5.0*2.0"
+
 
 def test_solve_linear_3():
     right_function = Constant(10)
@@ -146,6 +152,7 @@ def test_solve_linear_3():
     for step in steps:
         print(step)
 
+
 def test_parse_string_1():
     test_input = "2*x +3 = 10"
     parsed_function = parse_string(test_input)
@@ -153,3 +160,15 @@ def test_parse_string_1():
     assert solution == 3.5
     assert True
 
+def test_parse_function_works_with_parentheses():
+    passed = None
+    solution = None
+    try:
+        test_input = "2*(x+3)+5=15"
+        parsed_function = parse_string(test_input)
+        solution, steps = parsed_function.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed
+    assert solution == 2

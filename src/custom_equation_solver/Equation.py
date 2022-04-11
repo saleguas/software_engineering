@@ -12,6 +12,9 @@ class Equation:
         self.left_function = left_function
         self.right_function = right_function
 
+    def is_quadratic(self):
+        return self.left_function.is_quadratic() and self.right_function.is_quadratic()
+
     def is_linear(self):
         return self.left_function.is_linear() and self.right_function.is_linear()
 
@@ -28,10 +31,14 @@ class Equation:
         self.right_function = distribute(self.right_function)
         steps += "If applicable, apply the distributive property, yielding " + self.left_function.to_string() + " = " +\
                  self.right_function.to_string()
+        self.left_function = remove_nesting(self.left_function)
+        self.right_function = remove_nesting(self.right_function)
         self.left_function.simplify()
         self.right_function.simplify()
         self.left_function = remove_nesting(self.left_function)
         self.right_function = remove_nesting(self.right_function)
+        self.left_function.simplify()
+        self.right_function.simplify()
         self.left_function = standardize_linear_format(self.left_function)
         self.right_function = standardize_linear_format(self.right_function)
         steps += "If applicable, simplify, yielding " + self.left_function.to_string() + " = " +\
