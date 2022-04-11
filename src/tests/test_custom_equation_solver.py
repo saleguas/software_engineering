@@ -172,3 +172,21 @@ def test_parse_function_works_with_parentheses():
         passed = False
     assert passed
     assert solution == 2
+
+def test_standardize_linear_format():
+    function = Add([SimplePower('x', Constant(1)), Constant(1)])  # x+1
+    function = standardize_linear_format(function)  # should be 1x+1
+    assert isinstance(function, Add)
+    for addend in function.addends:
+        if isinstance(addend, Multiply):
+            assert len(addend.factors) == 2
+            assert (isinstance(addend.factors[0], Constant) and isinstance(addend.factors[0], SimplePower)) or\
+            (isinstance(addend.factors[1], Constant) and isinstance(addend.factors[0], SimplePower))
+            if isinstance(addend.factors[0], Constant):
+                assert addend.factors[0] == 1 and addend.factors[1].base == 'x' and addend.factors[1].power == 1
+            else:
+                assert addend.factors[1] == 1 and addend.factors[0].base == 'x' and addend.factors[0].power == 1
+        elif isinstance(addend, Constant):
+            assert addend == 1
+        else:
+            assert False
