@@ -347,7 +347,6 @@ def test_parse_function_backwards_parentheses():
     try:
         test_input = "2*x)+4(=10"
         parsed_function = parse_string(test_input)
-        solution, steps = parsed_function.solve_linear()
         passed = True
     except:
         passed = False
@@ -405,13 +404,13 @@ def test_to_string_1():
     left_function = Constant(10)
     right_function = Add([Constant(4), Multiply([Constant(2), SimplePower("x", Constant(1))])])
     equation = Equation(left_function, right_function)
-    assert equation.to_string() == "10=4+2*x"
+    assert equation.to_string() == "10.0 = 4.0 + 2.0*x"
 
 def test_to_string_2():
     left_function = Constant(17)
     right_function = Add([Multiply([Constant(5), SimplePower("x", Constant(1))]), Constant(7)])
     equation = Equation(left_function, right_function)
-    assert equation.to_string() == "17=5*x+7"
+    assert equation.to_string() == "17.0 = 5.0*x + 7.0"
 
 def test_solve_1():
     left_function = Constant(10)
@@ -423,6 +422,7 @@ def test_solve_2():
     left_function = Constant(10)
     right_function = Add([Constant(4), Multiply([Constant(2), SimplePower("x", Constant(1))])])
     equation = Equation(left_function, right_function)
-    assert equation.solve(SimplePower("x", Constant(1))) == 3
+    solution, steps = equation.solve(SimplePower("x", Constant(1)))
+    assert solution == 3
 
 #6 solve linear tests were already written so they are above; the remaining 6 will be here
