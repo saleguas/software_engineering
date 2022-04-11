@@ -13,6 +13,9 @@ class SimplePower(Power):
     def is_linear(self):
         return self.power == 0 or self.power == 1
 
+    def is_quadratic(self):
+        return self.power == 0 or self.power == 1 or self.power == 2
+
     def to_string(self):
         if self.power == 1.0:
             return self.base

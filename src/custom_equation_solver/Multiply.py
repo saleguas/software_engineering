@@ -46,9 +46,10 @@ class Multiply(Function):
         #         self.factors.pop(factor_index)
 
         # determine new constant and insert it into self.factors
-        new_constant = Constant(1)
+        new_constant = 1
         for constant in constants:
-            new_constant *= Constant(constant)
+            new_constant *= constant
+        new_constant = Constant(new_constant)
         self.factors.insert(0, new_constant)
 
     # combine power functions
@@ -96,6 +97,16 @@ class Multiply(Function):
                 return self.factors[1].is_linear()
             elif isinstance(self.factors[1], Constant) and isinstance(self.factors[0], SimplePower):
                 return self.factors[0].is_linear()
+        return len(self.factors) == 0
+
+    def is_quadratic(self):
+        if len(self.factors) == 1:
+            return self.factors[0].is_quadratic()
+        if len(self.factors) == 2:
+            if isinstance(self.factors[0], Constant) and isinstance(self.factors[1], SimplePower):
+                return self.factors[1].is_quadratic()
+            elif isinstance(self.factors[1], Constant) and isinstance(self.factors[0], SimplePower):
+                return self.factors[0].is_quadratic()
         return len(self.factors) == 0
 
     def to_string(self):

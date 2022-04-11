@@ -12,6 +12,9 @@ class Equation:
         self.left_function = left_function
         self.right_function = right_function
 
+    def is_quadratic(self):
+        return self.left_function.is_quadratic() and self.right_function.is_quadratic()
+
     def is_linear(self):
         return self.left_function.is_linear() and self.right_function.is_linear()
 
@@ -28,11 +31,16 @@ class Equation:
         self.right_function = distribute(self.right_function)
         steps += "If applicable, apply the distributive property, yielding " + self.left_function.to_string() + " = " +\
                  self.right_function.to_string()
-        self.left_function.simplify()
-        self.right_function.simplify()
-
         self.left_function = remove_nesting(self.left_function)
         self.right_function = remove_nesting(self.right_function)
+        self.left_function.simplify()
+        self.right_function.simplify()
+        self.left_function = remove_nesting(self.left_function)
+        self.right_function = remove_nesting(self.right_function)
+        self.left_function.simplify()
+        self.right_function.simplify()
+        self.left_function = standardize_linear_format(self.left_function)
+        self.right_function = standardize_linear_format(self.right_function)
         steps += "If applicable, simplify, yielding " + self.left_function.to_string() + " = " +\
                  self.right_function.to_string()
 
@@ -142,17 +150,27 @@ class Equation:
                     return False, ["ERROR"]
             if variable_left != variable_right:
                 return False, ["ERROR"]
-            right_side_1 = self.right_function - constant
-            right_side_2 = right_side_1/slope
-            steps = ["Subtract " + constant.to_string() + " from both sides of the equation, yielding " +
-                     self.left_function.to_string() + " - " + constant.to_string() + " = " +
-                     self.right_function.to_string() + " - " + constant.to_string() + ".",
-                     "Simplify: " + slope.to_string() + "*" + variable.to_string() + " = " + str(right_side_1) + ".",
-                     "Divide both sides by " + slope.to_string() + ": " +
-                     "(" + slope.to_string() + variable.to_string() + ")/" + slope.to_string() + " = " +
-                     str(right_side_1) + "/" + slope.to_string() + ".",
-                     "Simplify: " + variable.to_string() + " = " + str(right_side_2)]
-            return right_side_2, steps
+            slope_difference = Constant(float(slope_left-slope_right))
+            constant_difference = Constant(float(constant_right-constant_left))
+            left_side_1 = Add([Multiply([slope_difference, variable_right]), constant_left])
+            right_side_1 = constant_right
+            left_side_2 = Multiply([slope_difference, variable_right])
+            right_side_2 = constant_difference
+
+            steps = ["Subtract " + slope_right.to_string() + "*" + variable_right + " from both sides of the equation, yielding " +
+                     self.left_function.to_string() + " - " + slope_right.to_string() + "*" + variable_right + " = " +
+                     self.right_function.to_string() + " - " + slope_right.to_string() + "*" + variable_right + ".",
+                     "Simplify: " + left_side_1.to_string() + " = " + str(right_side_1) + ".",
+                     "Subtract " + str(constant_left) + " from both side of the equation, yielding " +
+                     left_side_1.to_string() + " - " + str(constant_left) + " = " + right_side_1.to_string() + " - " +
+                     str(constant_right) + ".",
+                     "Simplify: " + left_side_2.to_string() + " = " + right_side_2.to_string() + ".",
+                     "Divide both sides by " + str(slope_difference) + ": " +
+                     "(" + slope_difference.to_string() + variable_right.to_string() + ")/" + slope_difference.to_string() + " = " +
+                     constant_difference.to_string() + "/" + slope_difference.to_string() + ".",
+                     "Simplify: " + variable_right.to_string() + " = " + str(constant_difference/slope_difference)]
+            solution = Constant(float(constant_difference/slope_difference))
+            return solution, steps
 
     def solve(self, var: Variable):
         # check for linearity
