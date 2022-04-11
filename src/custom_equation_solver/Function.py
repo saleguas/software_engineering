@@ -27,6 +27,9 @@ class Function(ABC):
     def is_linear(self):
         pass
 
+    def is_quadratic(self):
+        pass
+
     def to_string(self):
         pass
 

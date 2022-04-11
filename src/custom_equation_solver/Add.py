@@ -93,6 +93,12 @@ class Add(Function):
                 return False
         return True
 
+    def is_quadratic(self):
+        for addend in self.addends:
+            if not addend.is_quadratic():
+                return False
+        return True
+
     def to_string(self):
         string = ""
         for i in range(len(self.addends)):

@@ -99,6 +99,16 @@ class Multiply(Function):
                 return self.factors[0].is_linear()
         return len(self.factors) == 0
 
+    def is_quadratic(self):
+        if len(self.factors) == 1:
+            return self.factors[0].is_quadratic()
+        if len(self.factors) == 2:
+            if isinstance(self.factors[0], Constant) and isinstance(self.factors[1], SimplePower):
+                return self.factors[1].is_quadratic()
+            elif isinstance(self.factors[1], Constant) and isinstance(self.factors[0], SimplePower):
+                return self.factors[0].is_quadratic()
+        return len(self.factors) == 0
+
     def to_string(self):
         string = ""
         for i in range(len(self.factors)):

@@ -153,3 +153,16 @@ def test_parse_string_1():
     solution, steps = parsed_function.solve_linear()
     assert solution == 3.5
     assert True
+
+def test_parse_function_works_with_parentheses():
+    passed = None
+    solution = None
+    try:
+        test_input = "2*(x+3)+5=15"
+        parsed_function = parse_string(test_input)
+        solution, steps = parsed_function.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed
+    assert solution == 2

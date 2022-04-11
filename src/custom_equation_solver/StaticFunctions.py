@@ -39,6 +39,16 @@ def remove_nesting(function):
         else:
             for i in range(len(function.addends)):
                 function.addends[i] = remove_nesting(function.addends[i])
+            for i in range(len(function.addends)):
+                if isinstance(function.addends[i], Add):
+                    new_factors = []
+                    for addend in function.addends[i].addends:
+                        new_factors.append(addend)
+                    function.addends.pop(i)
+                    for addend in new_factors:
+                        function.addends.append(addend)
+                    i = 0
+
     return function
 
 
