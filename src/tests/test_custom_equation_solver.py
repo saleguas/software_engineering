@@ -86,7 +86,7 @@ def test_add_combine_like_terms():
             assert 0 == 1
 
 
-def test_solve_linear():
+def test_solve_linear_1():
     left_function = Constant(10)
     right_function = Add([Multiply([Constant(2), SimplePower("x", Constant(1))]), Constant(4)])
     equation = Equation(left_function, right_function)
@@ -105,7 +105,7 @@ def test_solve_linear_2():
     for step in steps:
         print(step)
 
-def test_linear_equation_with_like_terms():
+def test_linear_equation_with_like_terms_1():
     left_function = Add([Multiply([Constant(3), SimplePower("x", Constant(1))]), Constant(0)])
     right_function = Add([Multiply([Constant(1), SimplePower("x", Constant(1))]), Constant(4)])
     equation = Equation(left_function, right_function)
@@ -153,8 +153,22 @@ def test_parse_string_1():
     assert solution == 3.5
     assert True
 
+def test_parse_string_2():
+    passed = None
+    solution = None
+    try:
+        test_input = "5*x +4 = 14"
+        parsed_function = parse_string(test_input)
+        solution, steps = parsed_function.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 2
+
 def test_parse_string_many_spaces():
     passed = None
+    solution = None
     try:
         test_input = "2 * x + 4 = 10"
         parsed_function = parse_string(test_input)
@@ -165,8 +179,41 @@ def test_parse_string_many_spaces():
     assert passed == True
     assert solution == 3
 
+def test_parse_string_invalid_function_1():
+    passed = None
+    try:
+        test_input = "2*+x+4=10"
+        parsed_function = parse_string(test_input)
+        passed = True
+    except:
+        passed = False
+    assert passed == False
+
+def test_parse_string_invalid_function_2():
+    passed = None
+    try:
+        test_input = "2*x+4==10"
+        parsed_function = parse_string(test_input)
+        passed = True
+    except:
+        passed = False
+    assert passed == False
+
+def test_parse_string_several_consecutive_spaces():
+    passed = None
+    parsed_function = None
+    try:
+        test_input = "2*x+   4=10"
+        parsed_function = parse_string(test_input)
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert parsed_function == "2*x+4=10"
+
 def test_parse_string_already_valid():
     passed = None
+    solution = None
     try:
         test_input = "2*x+4=10"
         parsed_function = parse_string(test_input)
@@ -199,6 +246,7 @@ def test_parse_string_two_variables():
 
 def test_parse_string_works_when_user_is_on_acid():
     passed = None
+    solution = None
     try:
         test_input = "2*x#+4&=10_"
         parsed_function = parse_string(test_input)
@@ -209,8 +257,32 @@ def test_parse_string_works_when_user_is_on_acid():
     assert passed == True
     assert solution == 3
 
+def test_parse_function_coefficient_after_variable():
+    passed = None
+    solution = None
+    try:
+        test_input = "x*2+4=10"
+        parsed_function = parse_string(test_input)
+        solution, steps = parsed_function.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 3
+
+def test_parse_function_obligatory_empty_string_case():
+    passed = None
+    try:
+        test_input = ""
+        parsed_function = parse_string(test_input)
+        passed = True
+    except:
+        passed = False
+    assert passed == False
+
 def test_parse_function_works_with_parentheses():
     passed = None
+    solution = None
     try:
         test_input = "2*(x+3)+5=15"
         parsed_function = parse_string(test_input)
@@ -221,8 +293,35 @@ def test_parse_function_works_with_parentheses():
     assert passed == True
     assert solution == 2
 
+def test_parse_function_double_coefficients_1():
+    passed = None
+    solution = None
+    try:
+        test_input = "2*3*x+4=14"
+        parsed_function = parse_string(test_input)
+        solution, steps = parsed_function.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 2
+
+def test_parse_function_double_coefficients_2():
+    passed = None
+    solution = None
+    try:
+        test_input = "2*x*3+4=14"
+        parsed_function = parse_string(test_input)
+        solution, steps = parsed_function.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 2
+
 def test_parse_function_like_terms():
     passed = None
+    solution = None
     try:
         test_input = "3*x+4=x+10"
         parsed_function = parse_string(test_input)
@@ -232,6 +331,16 @@ def test_parse_function_like_terms():
         passed = False
     assert passed == True
     assert solution == 3
+
+def test_parse_function_double_equals():
+    passed = None
+    try:
+        test_input = "2*x+4=3*x+1=10"
+        parsed_function = parse_string(test_input)
+        passed = True
+    except:
+        passed = False
+    assert passed == False
 
 def test_parse_function_backwards_parentheses():
     passed = None
@@ -257,6 +366,7 @@ def test_parse_function_equals_sign_in_parentheses():
 
 def test_parse_function_both_sides_in_parentheses():
     passed = None
+    solution = None
     try:
         test_input = "(2*x+4)=(7+3)"
         parsed_function = parse_string(test_input)
@@ -266,3 +376,53 @@ def test_parse_function_both_sides_in_parentheses():
         passed = False
     assert passed == True
     assert solution == 3
+
+def test_is_linear_true():
+    left_function = Add([Constant(4), Multiply([Constant(2), SimplePower("x", Constant(1))])])
+    right_function = Constant(10)
+    equation = Equation(left_function, right_function)
+    assert equation.is_linear() == True
+
+def test_is_linear_false():
+    left_function = Constant(10)
+    right_function = Add([Constant(4), Multiply([Constant(2), SimplePower("x", Constant(2))])])
+    equation = Equation(left_function, right_function)
+    assert equation.is_linear() == False
+
+def test_is_linear_true_like_terms():
+    left_function = Add([SimplePower("x", Constant(1)), Constant(10)])
+    right_function = Add([Constant(4), Multiply([Constant(3), SimplePower("x", Constant(1))])])
+    equation = Equation(left_function, right_function)
+    assert equation.is_linear() == True
+
+def test_is_linear_false_but_seems_true():
+    left_function = Constant(16)
+    right_function = Multiply([SimplePower("x", 1), SimplePower("x", 1)])
+    equation = Equation(left_function, right_function)
+    assert equation.is_linear() == False
+
+def test_to_string_1():
+    left_function = Constant(10)
+    right_function = Add([Constant(4), Multiply([Constant(2), SimplePower("x", Constant(1))])])
+    equation = Equation(left_function, right_function)
+    assert equation.to_string == "10=4+2*x"
+
+def test_to_string_2():
+    left_function = Constant(17)
+    right_function = Add([Multiply([Constant(5), SimplePower("x", Constant(1))]), Constant(7)])
+    equation = Equation(left_function, right_function)
+    assert equation.to_string == "17=5*x+7"
+
+def test_solve_1():
+    left_function = Constant(10)
+    right_function = Add([Constant(4), Multiply([Constant(2), SimplePower("x", Constant(2))])])
+    equation = Equation(left_function, right_function)
+    assert equation.solve() == None
+
+def test_solve_2():
+    left_function = Constant(10)
+    right_function = Add([Constant(4), Multiply([Constant(2), SimplePower("x", Constant(1))])])
+    equation = Equation(left_function, right_function)
+    assert equation.solve() == 3
+
+#6 solve linear tests were already written so they are above; the remaining 6 will be here
