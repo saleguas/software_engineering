@@ -13,8 +13,8 @@ from SimplePower import SimplePower
 from Multiply import Multiply
 from Add import Add
 from Equation import Equation
-from StaticFunctions import *
 import pytest
+from StaticFunctions import *
 
 
 def test_multiply_combine_constants():
@@ -86,7 +86,7 @@ def test_add_combine_like_terms():
             assert 0 == 1
 
 
-def test_solve_linear():
+def test_solve_linear_1():
     left_function = Constant(10)
     right_function = Add([Multiply([Constant(2), SimplePower("x", Constant(1))]), Constant(4)])
     equation = Equation(left_function, right_function)
@@ -105,8 +105,7 @@ def test_solve_linear_2():
     for step in steps:
         print(step)
 
-
-def test_linear_equation_with_like_terms():
+def test_linear_equation_with_like_terms_1():
     left_function = Add([Multiply([Constant(3), SimplePower("x", Constant(1))]), Constant(0)])
     right_function = Add([Multiply([Constant(1), SimplePower("x", Constant(1))]), Constant(4)])
     equation = Equation(left_function, right_function)
@@ -114,7 +113,6 @@ def test_linear_equation_with_like_terms():
     for step in steps:
         print(step)
     assert solution == 2
-
 
 def test_linear_equation_with_like_terms_2():
     left_function = Multiply([Constant(3), SimplePower("x", Constant(1))])
@@ -125,7 +123,6 @@ def test_linear_equation_with_like_terms_2():
         print(step)
     assert solution == 2
 
-
 def test_linear_equation_with_distribution():
     left_function = Constant(15)
     right_function = Multiply([Add([SimplePower("x", Constant(1)), Constant(2)]), Constant(3)])
@@ -135,12 +132,10 @@ def test_linear_equation_with_distribution():
         print(step)
     assert solution == 3
 
-
 def test_distribute():
     function = Multiply([Constant(5), Add([SimplePower("x", 1), Constant(2)])])
     function = distribute(function)
     assert function.to_string() == "5.0*x + 5.0*2.0"
-
 
 def test_solve_linear_3():
     right_function = Constant(10)
@@ -150,29 +145,6 @@ def test_solve_linear_3():
     assert solution == 0.5
     for step in steps:
         print(step)
-
-
-def test_parse_string_1():
-    test_input = "2*x +3 = 10"
-    parsed_function = parse_string(test_input)
-    solution, steps = parsed_function.solve_linear()
-    assert solution == 3.5
-    assert True
-
-
-def test_parse_function_works_with_parentheses():
-    passed = None
-    solution = None
-    try:
-        test_input = "2*(x+3)+5=15"
-        parsed_function = parse_string(test_input)
-        solution, steps = parsed_function.solve_linear()
-        passed = True
-    except:
-        passed = False
-    assert passed
-    assert solution == 2
-
 
 def test_standardize_linear_format():
     function = Add([SimplePower('x', Constant(1)), Constant(1)])  # x+1
@@ -192,26 +164,12 @@ def test_standardize_linear_format():
         else:
             assert False
 
-
-def test_solve_linear_1():
-    left_function = Constant(10)
-    right_function = Add([Multiply([Constant(2), SimplePower("x", Constant(1))]), Constant(4)])
-    equation = Equation(left_function, right_function)
-    solution, steps = equation.solve_linear()
-    assert solution == 3.0
-    for step in steps:
-        print(step)
-
-
-def test_linear_equation_with_like_terms_1():
-    left_function = Add([Multiply([Constant(3), SimplePower("x", Constant(1))]), Constant(0)])
-    right_function = Add([Multiply([Constant(1), SimplePower("x", Constant(1))]), Constant(4)])
-    equation = Equation(left_function, right_function)
-    solution, steps = equation.solve_linear()
-    for step in steps:
-        print(step)
-    assert solution == 2
-
+def test_parse_string_1():
+    test_input = "2*x +3 = 10"
+    parsed_function = parse_string(test_input)
+    solution, steps = parsed_function.solve_linear()
+    assert solution == 3.5
+    assert True
 
 def test_parse_string_2():
     passed = None
@@ -340,33 +298,44 @@ def test_parse_function_obligatory_empty_string_case():
         passed = False
     assert passed == False
 
+def test_parse_function_works_with_parentheses():
+    passed = None
+    solution = None
+    try:
+        test_input = "2*(x+3)+5=15"
+        parsed_function = parse_string(test_input)
+        solution, steps = parsed_function.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 2
 
 def test_parse_function_double_coefficients_1():
     passed = None
     solution = None
     try:
-        test_input = "2*3*x+4=14"
+        test_input = "2*3*x+4=16"
         parsed_function = parse_string(test_input)
         solution, steps = parsed_function.solve_linear()
         passed = True
     except:
         passed = False
     assert passed == True
-    assert solution == 5/3
-
+    assert solution == 2
 
 def test_parse_function_double_coefficients_2():
     passed = None
     solution = None
     try:
-        test_input = "2*x*3+4=14"
+        test_input = "2*x*3+4=16"
         parsed_function = parse_string(test_input)
         solution, steps = parsed_function.solve_linear()
         passed = True
     except:
         passed = False
     assert passed == True
-    assert solution == 5/3
+    assert solution == 2
 
 def test_parse_function_like_terms():
     passed = None
@@ -472,4 +441,116 @@ def test_solve_2():
     right_function = Add([Constant(4), Multiply([Constant(2), SimplePower("x", Constant(1))])])
     equation = Equation(left_function, right_function)
     solution, steps = equation.solve(SimplePower("x", Constant(1)))
+    assert solution == 3
+
+#6 solve linear tests were already written so they are above; the remaining 6 will be here
+
+def test_solve_linear_multi_sum():
+    passed = None
+    solution = None
+    try:
+        left_function = Constant(10)
+        right_function = Add([Constant(5), Constant(5), Constant(-6), Multiply([Constant(2), SimplePower("x", Constant(1))])])
+        solution, steps = equation.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 3
+
+def test_solve_linear_multi_product():
+    passed = None
+    solution = None
+    try:
+        left_function = Constant(10)
+        right_function = Add([Constant(4), Multiply([Constant(5), Constant(4), Constant(0.1), SimplePower("x", Constant(1))])])
+        solution, steps = equation.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 3
+
+def test_solve_linear_with_exponent_expression():
+    passed = None
+    solution = None
+    try:
+        left_function = Add([Constant(7), Multiply([Constant(5), SimplePower("x", Constant(1))])])
+        right_function = Add([Multiply([Constant(2), SimplePower("x", Add([Constant(3), Constant(-2)]))]), Constant(22)]) #here the exponent is a sum, but the sum's value is still 1
+        equation = Equation(left_function, right_function)
+        solution, steps = equation.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 5
+
+def test_solve_linear_negative_answer():
+    passed = None
+    solution = None
+    try:
+        left_function = Constant(3)
+        right_function = Add([Constant(15), Multiply([Constant(3), SimplePower("x", Constant(1))])])
+        equation = Equation(left_function, right_function)
+        solution, steps = equation.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == -4
+
+def test_solve_linear_zero_power():
+    passed = None
+    solution = None
+    try:
+        left_function = Add([Constant(9), SimplePower("x", Constant(0))])
+        right_function = Add([Constant(4), Multiply([Constant(2), SimplePower("x", Constant(1))])])
+        equation = Equation(left_function, right_function)
+        solution, steps = equation.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 3
+
+def test_solve_linear_zero_power_times_variable():
+    passed = None
+    solution = None
+    try:
+        left_function = Add([Constant(4), Constant(6)])
+        right_function = Add([Constant(4), Multiply([Constant(2), SimplePower("x", Constant(1)), SimplePower("x", Constant(0))])])
+        equation = Equation(left_function, right_function)
+        solution, steps = equation.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 3
+
+def test_solve_linear_nested_parentheses():
+    passed = None
+    solution = None
+    try:
+        left_function = Multiply([Add([Constant(2), Multiply([Constant(2), SimplePower("x", Constant(1)), Constant(3)])]), Add([Constant(5.7), Constant(-3.7)])])
+        right_function = Multiply([Constant(3), Add([Constant(10), Multiply([Constant(2), Constant(2), Constant(2)])])])
+        equation = Equation(left_function, right_function)
+        solution, steps = equation.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 5
+
+def test_solve_linear_array_with_single_element():
+    passed = None
+    solution = None
+    try:
+        left_function = Add([Constant(10)])
+        right_function = Add([Multiply([Constant(4)]), Multiply([Constant(2), SimplePower("x", Constant(1))])])
+        equation = Equation(left_function, right_function)
+        solution, steps = equation.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
     assert solution == 3
