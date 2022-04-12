@@ -58,7 +58,7 @@ class Add(Function):
 
         # delete simple power functions and multiply functions with constant * power
         self.addends = [addend for addend in self.addends if not (isinstance(addend, SimplePower) or
-                                                                  (isinstance(addend, Multiply) and (
+                                                                  (isinstance(addend, Multiply) and len(addend.factors) == 2 and (
                                                                           ((isinstance(addend.factors[0], int) or
                                                                             isinstance(addend.factors[0],
                                                                                        float)) and
