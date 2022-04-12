@@ -54,7 +54,7 @@ def remove_nesting(function):
 
 def standardize_linear_format(function):
     if not function.is_linear():
-        return None
+        return function
     if isinstance(function, Add):
         # return Add([standardize_linear_format(addend) for addend in function.addends])
         for i in range(len(function.addends)):
@@ -124,6 +124,7 @@ def parse_string(input: str):
     equals_passed = False
     for c in filtered_input:
         if c == "=":
+            assert not equals_passed
             equals_passed = True
         elif not equals_passed:
             left_string += c
