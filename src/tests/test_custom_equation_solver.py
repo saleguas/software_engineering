@@ -479,7 +479,7 @@ def test_solve_linear_negative_answer():
     except:
         passed = False
     assert passed == True
-    assert solution = -4
+    assert solution == -4
 
 def test_solve_linear_zero_power():
     passed = None
