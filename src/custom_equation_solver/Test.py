@@ -171,6 +171,7 @@ def test_parse_function_works_with_parentheses():
 def test_standardize_linear_format():
     function = Add([SimplePower('x', Constant(1)), Constant(1)])  # x+1
     function = standardize_linear_format(function)  # should be 1x+1
+    sample = Add([Multiply([Constant(1), SimplePower('x', 1)]), Constant(1)])
     assert isinstance(function, Add)
     for addend in function.addends:
         if isinstance(addend, Multiply):
@@ -467,3 +468,295 @@ def test_solve_2():
     equation = Equation(left_function, right_function)
     solution, steps = equation.solve(SimplePower("x", Constant(1)))
     assert solution == 3
+
+def test_solve_linear_multi_sum():
+    passed = None
+    solution = None
+    try:
+        left_function = Constant(10)
+        right_function = Add([Constant(5), Constant(5), Constant(-6), Multiply([Constant(2), SimplePower("x", Constant(1))])])
+        equation = Equation(left_function, right_function)
+        solution, steps = equation.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 3
+
+def test_solve_linear_multi_product():
+    passed = None
+    solution = None
+    try:
+        left_function = Constant(10)
+        right_function = Add([Constant(4), Multiply([Constant(5), Constant(4), Constant(0.1), SimplePower("x", Constant(1))])])
+        equation = Equation(left_function, right_function)
+        solution, steps = equation.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 3
+
+# def test_solve_linear_with_exponent_expression():
+#     passed = None
+#     solution = None
+#     try:
+#         left_function = Add([Constant(7), Multiply([Constant(5), SimplePower("x", Constant(1))])])
+#         right_function = Add([Multiply([Constant(2), SimplePower("x", Add([Constant(3), Constant(-2)]))]), Constant(22)]) #here the exponent is a sum, but the sum's value is still 1
+#         equation = Equation(left_function, right_function)
+#         solution, steps = equation.solve_linear()
+#         passed = True
+#     except:
+#         passed = False
+#     assert passed == True
+#     assert solution == 5
+
+def test_solve_linear_negative_answer():
+    passed = None
+    solution = None
+    try:
+        left_function = Constant(3)
+        right_function = Add([Constant(15), Multiply([Constant(3), SimplePower("x", Constant(1))])])
+        equation = Equation(left_function, right_function)
+        solution, steps = equation.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == -4
+
+# def test_solve_linear_zero_power():
+#     passed = None
+#     solution = None
+#     try:
+#         left_function = Add([Constant(9), SimplePower("x", Constant(0))])
+#         right_function = Add([Constant(4), Multiply([Constant(2), SimplePower("x", Constant(1))])])
+#         equation = Equation(left_function, right_function)
+#         solution, steps = equation.solve_linear()
+#         passed = True
+#     except:
+#         passed = False
+#     assert passed == True
+#     assert solution == 3
+
+def test_solve_linear_zero_power_times_variable():
+    passed = None
+    solution = None
+    try:
+        left_function = Add([Constant(4), Constant(6)])
+        right_function = Add([Constant(4), Multiply([Constant(2), SimplePower("x", Constant(1)), SimplePower("x", Constant(0))])])
+        equation = Equation(left_function, right_function)
+        solution, steps = equation.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 3
+
+def test_solve_linear_nested_parentheses():
+    passed = None
+    solution = None
+    try:
+        left_function = Multiply([Add([Constant(2), Multiply([Constant(2), SimplePower("x", Constant(1)), Constant(3)])]), Add([Constant(5.7), Constant(-3.7)])])
+        right_function = Multiply([Constant(3), Add([Constant(10), Multiply([Constant(2), Constant(2), Constant(2)])])])
+        equation = Equation(left_function, right_function)
+        solution, steps = equation.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 25/6
+
+def test_solve_linear_array_with_single_element():
+    passed = None
+    solution = None
+    try:
+        left_function = Add([Constant(10)])
+        right_function = Add([Multiply([Constant(4)]), Multiply([Constant(2), SimplePower("x", Constant(1))])])
+        equation = Equation(left_function, right_function)
+        solution, steps = equation.solve_linear()
+        passed = True
+    except:
+        passed = False
+    assert passed == True
+    assert solution == 3
+
+def test_standardize_linear_format_1():
+    function = Add([SimplePower('x', Constant(1)), Constant(1)])
+    function = standardize_linear_format(function)
+    assert isinstance(function, Add)
+    for addend in function.addends:
+        if isinstance(addend, Multiply):
+            assert len(addend.factors) == 2
+            assert (isinstance(addend.factors[0], Constant) and isinstance(addend.factors[0], SimplePower)) or \
+                   (isinstance(addend.factors[1], Constant) and isinstance(addend.factors[0], SimplePower))
+            if isinstance(addend.factors[0], Constant):
+                assert addend.factors[0] == 1 and addend.factors[1].base == 'x' and addend.factors[1].power == 1
+            else:
+                assert addend.factors[1] == 1 and addend.factors[0].base == 'x' and addend.factors[0].power == 1
+        elif isinstance(addend, Constant):
+            assert addend == 1
+        else:
+            assert False
+
+def test_standardize_linear_format_2():
+    function = Add([Constant(0)])
+    function = standardize_linear_format(function)
+    assert isinstance(function, Add)
+    for addend in function.addends:
+        if isinstance(addend, Multiply):
+            assert len(addend.factors) == 2
+            assert (isinstance(addend.factors[0], Constant) and isinstance(addend.factors[0], SimplePower)) or \
+                   (isinstance(addend.factors[1], Constant) and isinstance(addend.factors[0], SimplePower))
+            if isinstance(addend.factors[0], Constant):
+                assert addend.factors[0] == 1 and addend.factors[1].base == 'x' and addend.factors[1].power == 1
+            else:
+                assert addend.factors[1] == 1 and addend.factors[0].base == 'x' and addend.factors[0].power == 1
+        elif isinstance(addend, Constant):
+            assert addend == 0
+        else:
+            assert False
+
+def test_standardize_linear_format_3():
+    function = Add([SimplePower('x',Constant(1))])
+    function = standardize_linear_format(function)
+    assert isinstance(function, Add)
+    for addend in function.addends:
+        if isinstance(addend, Multiply):
+            assert len(addend.factors) == 2
+            assert (isinstance(addend.factors[0], Constant) and isinstance(addend.factors[0], SimplePower)) or \
+                   (isinstance(addend.factors[1], Constant) and isinstance(addend.factors[0], SimplePower))
+            if isinstance(addend.factors[0], Constant):
+                assert addend.factors[0] == 1 and addend.factors[1].base == 'x' and addend.factors[1].power == 1
+            else:
+                assert addend.factors[1] == 1 and addend.factors[0].base == 'x' and addend.factors[0].power == 1
+        elif isinstance(addend, Constant):
+            assert addend == 1
+        else:
+            assert False
+
+def test_standardize_linear_format_4():
+    function = Add([SimplePower('x',Constant(1)),Constant(4)])
+    function = standardize_linear_format(function)
+    assert isinstance(function, Add)
+    for addend in function.addends:
+        if isinstance(addend, Multiply):
+            assert len(addend.factors) == 2
+            assert (isinstance(addend.factors[0], Constant) and isinstance(addend.factors[0], SimplePower)) or \
+                   (isinstance(addend.factors[1], Constant) and isinstance(addend.factors[0], SimplePower))
+            if isinstance(addend.factors[0], Constant):
+                assert addend.factors[0] == 1 and addend.factors[1].base == 'x' and addend.factors[1].power == 1
+            else:
+                assert addend.factors[1] == 1 and addend.factors[0].base == 'x' and addend.factors[0].power == 1
+        elif isinstance(addend, Constant):
+            assert addend == 4
+        else:
+            assert False
+
+def test_standardize_linear_format_5():
+    function = Add([Multiply([SimplePower('x',Constant(1)),Constant(2)]),Constant(3)])
+    function = standardize_linear_format(function)
+    assert isinstance(function, Add)
+    for addend in function.addends:
+        if isinstance(addend, Multiply):
+            assert len(addend.factors) == 2
+            assert (isinstance(addend.factors[0], Constant) and isinstance(addend.factors[0], SimplePower)) or \
+                   (isinstance(addend.factors[1], Constant) and isinstance(addend.factors[0], SimplePower))
+            if isinstance(addend.factors[0], Constant):
+                assert addend.factors[0] == 2 and addend.factors[1].base == 'x' and addend.factors[1].power == 1
+            else:
+                assert addend.factors[1] == 2 and addend.factors[0].base == 'x' and addend.factors[0].power == 1
+        elif isinstance(addend, Constant):
+            assert addend == 3
+        else:
+            assert False
+
+@pytest.mark.parametrize(
+    ('input2','expected2'),
+    (
+        pytest.param('dawda',False,id='test string'),
+        pytest.param(4.5,True,id='test float'),
+        pytest.param(3,True,id='test int'),
+        pytest.param('+',False,id='test char'),
+    )
+)
+
+def test_is_float(input2,expected2):
+    assert is_float(input2) == expected2
+
+def test_constant_evaluate():
+    c = Constant(3.3)
+    assert c.evaluate(3) == 3.3
+
+def test_constant_is_linear():
+    c = Constant(5.6)
+    assert c.is_linear() == True
+
+def test_constant_is_quadratic():
+    c = Constant(2.0)
+    assert c.is_quadratic() == True
+
+def test_constant_to_string():
+    c = Constant(1.6)
+    assert c.to_string() == "1.6"
+
+def test_constant_simplify():
+    c = Constant(1.2)
+    assert c.simplify() == 1.2
+
+@pytest.mark.parametrize(
+    ('input1','input1_1','expected1'),
+    (
+        pytest.param(SimplePower('x',2),SimplePower('x',3),5,id='x^2*x^3'),
+        pytest.param(SimplePower('x',1),SimplePower('x',1),2,id='x*x'),
+        pytest.param(SimplePower('x',3),SimplePower('x',4),7,id='x^3*x^4'),
+        pytest.param(SimplePower('x',20),SimplePower('x',20),40,id='x^20*x^20'),
+        pytest.param(SimplePower('x',9),SimplePower('x',3),12,id='x^9*x^3'),
+    )
+)
+
+def test_multiply_combine_powers_2(input1,input1_1,expected1):
+    function = Multiply([input1,input1_1])
+    function.combine_powers()
+    assert isinstance(function,Multiply)
+    assert len(function.factors) == 1
+    assert isinstance(function.factors[0],SimplePower)
+    assert function.factors[0].base == 'x'
+    assert function.factors[0].power == expected1
+
+@pytest.mark.parametrize(
+    ('input2','expected2'),
+    (
+        pytest.param(Multiply([Constant(5)]),True,id='test 5'),
+        pytest.param(Multiply([SimplePower('x',1),Constant(3)]),True,id='test 3x'),
+        pytest.param(Multiply([SimplePower('x',1)]),True,id='test x'),
+        pytest.param(Multiply([SimplePower('x',2)]),False,id='test x^2'),
+        pytest.param(Multiply([Constant(3),SimplePower('x',2)]),False,id='test 3x^2'),
+    )
+)
+def test_is_linear(input2,expected2):
+    assert input2.is_linear() == expected2
+
+def test_simple_power_evaluate():
+    sp = SimplePower("x",3)
+    assert sp.evaluate(2) == 8
+
+def test_simple_power_is_linear():
+    sp = SimplePower("x",5)
+    assert sp.is_linear() == False
+
+def test_simple_power_to_string():
+    sp = SimplePower("x",1)
+    assert sp.to_string() == "x"
+
+def test_variable_evaluate():
+    c = Variable("y")
+    assert c.evaluate(3) == 3
+
+def test_variable_is_linear():
+    c = Variable("z")
+    assert c.is_linear() == True
+
+def test_variable_to_string():
+    c = Variable("v")
+    assert c.to_string() == "v"
