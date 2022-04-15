@@ -93,6 +93,8 @@ def balanced_delimiters(input: str) -> bool:
             delimiter_count += 1
         elif c == ")":
             delimiter_count -= 1
+        if delimiter_count < 0:
+            return False
     return delimiter_count == 0
 
 
