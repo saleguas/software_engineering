@@ -73,7 +73,7 @@ class Multiply(Function):
         self.factors = [factor for factor in self.factors if not isinstance(factor, SimplePower)]
         # Insert new power functions
         for base in power_bases:
-            self.factors.append(SimplePower(base, power_bases[base]))
+            self.factors.append(SimplePower(base, Constant(power_bases[base])))
 
     # Postconditions: constants are multiplied together, and functions
     # are ordered as follows: constant, variable or power (variable if power is 1;
