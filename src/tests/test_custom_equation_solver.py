@@ -766,3 +766,46 @@ def test_variable_is_linear():
 def test_variable_to_string():
     c = Variable("v")
     assert c.to_string() == "v"
+
+def test_solve_quadratic_1():
+    left_function = Add([Multiply([SimplePower("x", Constant(2)), Constant(2)]), Multiply([SimplePower("x", Constant(1)), Constant(-1)]), Constant(5)])
+    right_function = Add([Multiply([SimplePower("x", Constant(2)), Constant(-5)]), Multiply([SimplePower("x", Constant(1)), Constant(0.5)]), Constant(10)])
+    equation = Equation(left_function, right_function)
+    assert equation.is_quadratic()
+    solution, steps = equation.solve_quadratic()
+    assert -.745 < solution[1] < -.744
+    assert .959 < solution[0] < .96
+
+def test_solve_quadratic_2():
+    left_function = SimplePower('x', Constant(2))
+    right_function = Constant(1)
+    equation = Equation(left_function, right_function)
+    assert equation.is_quadratic()
+    solution, steps = equation.solve_quadratic()
+    assert solution[0] == 1
+    assert solution[1] == -1
+
+def test_solve_quadratic_3():
+    left_function = Add([Multiply([SimplePower("x", Constant(2)), Constant(2)]), Multiply([SimplePower("x", Constant(1)), Constant(-1)]), Constant(5)])
+    right_function = Multiply([SimplePower("x", Constant(2)), Constant(2)])
+    equation = Equation(left_function, right_function)
+    assert equation.is_quadratic()
+    solution, steps = equation.solve_quadratic()
+    assert solution == 5
+
+def test_solve_quadratic_4():
+    left_function = Add([Multiply([SimplePower("x", Constant(2)), Constant(.5)]), Multiply([SimplePower("x", Constant(1)), Constant(-1)]), Constant(5), Multiply([SimplePower("x", Constant(2)), Constant(.5)]), Constant(2)])
+    right_function = Add([Multiply([SimplePower("x", Constant(1)), Constant(0.5)]), Constant(10)])
+    equation = Equation(left_function, right_function)
+    assert equation.is_quadratic()
+    solution, steps = equation.solve_quadratic()
+    assert -1.138 < solution[1] < -1.137
+    assert 2.637 < solution[0] < 2.638
+
+def test_solve_quadratic_5():
+    left_function = Add([Multiply([SimplePower("x", Constant(2)), Constant(.5)]), Multiply([SimplePower("x", Constant(1)), Constant(-1)]), Constant(5), Multiply([SimplePower("x", Constant(2)), Constant(.5)]), Constant(2)])
+    right_function = Add([Multiply([SimplePower("x", Constant(2)), Constant(.5)]), Multiply([SimplePower("x", Constant(1)), Constant(-1)]), Constant(5), Multiply([SimplePower("x", Constant(2)), Constant(.5)]), Constant(2)])
+    equation = Equation(left_function, right_function)
+    assert equation.is_quadratic()
+    solution, steps = equation.solve_quadratic()
+    assert solution

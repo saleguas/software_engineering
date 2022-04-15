@@ -72,9 +72,9 @@ class Add(Function):
         # append simplified power functions.
         for term in terms:
             if terms[term] == 1:
-                self.addends.append(SimplePower(term[0], term[1]))
-            else:
-                self.addends.append(Multiply([Constant(terms[term]), SimplePower(term[0], term[1])]))
+                self.addends.append(SimplePower(term[0], Constant(term[1])))
+            elif terms[term] != 0:
+                self.addends.append(Multiply([Constant(terms[term]), SimplePower(term[0], Constant(term[1]))]))
 
     def simplify(self):
         self.combine_like_terms()
