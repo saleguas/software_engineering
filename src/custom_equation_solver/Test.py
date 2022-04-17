@@ -912,3 +912,42 @@ def test_multiply_to_string_4():
                               Multiply([SimplePower("x", Constant(1)), Constant(-1)]), Constant(5),
                               Multiply([SimplePower("x", Constant(2)), Constant(.5)]), Constant(2)])])
     assert function.to_string() == '(x^2.0*0.5 + x*-1.0 + 5.0 + x^2.0*0.5 + 2.0)*(x^2.0*0.5 + x*-1.0 + 5.0 + x^2.0*0.5 + 2.0)'
+
+
+def test_remove_nesting_add():
+    function1 = remove_nesting(Add([Constant(4), Add([Constant(3), Constant(3)])]))
+    function2 = Add([Constant(4), Constant(3), Constant(3)])
+    assert function1.to_string() == function2.to_string()
+
+
+def test_remove_nesting_multiply():
+    function1 = remove_nesting(Multiply([Constant(3), Multiply([Constant(2), Constant(2)])]))
+    function2 = Multiply([Constant(3), Constant(2), Constant(2)])
+    assert function1.to_string() == function2.to_string()
+
+
+def test_remove_nesting_with_variable():
+    function1 = remove_nesting(Multiply([Constant(3), Multiply([SimplePower("x", Constant(1)), Constant(2)])]))
+    function2 = Multiply([Constant(3), SimplePower("x", Constant(1)), Constant(2)])
+    assert function1.to_string() == function2.to_string()
+
+
+def test_balanced_delimiters_valid():
+    function = "2*(x+5)"
+    assert balanced_delimiters(function) == True
+
+
+def test_balanced_delimeters_invalid():
+    function = "2*(x+5)+3)"
+    assert balanced_delimiters(function) == False
+
+
+def test_balanced_delimiters_backwards():
+    function = "2)*x+(5"
+    assert balanced_delimiters(function) == False
+
+
+def test_balanced_delimiters_foil_method():
+    # I am using parse_string, but the part that is tricky involves testing the balanced delimiters
+    input = "(x+2)*(x+5)=40"
+    assert balanced_delimiters(input)
