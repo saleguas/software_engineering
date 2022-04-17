@@ -131,17 +131,17 @@ def balanced_delim():
 def test_remove_nesting_add():
     function1 = remove_nesting(Add([Constant(4), Add([Constant(3), Constant(3)])]))
     function2 = Add([Constant(4), Constant(3), Constant(3)])
-    assert function1 == function2
+    assert function1.to_string() == function2.to_string()
 
 def test_remove_nesting_multiply():
     function1 = remove_nesting(Multiply([Constant(3), Multiply([Constant(2), Constant(2)])]))
     function2 = Multiply([Constant(3), Constant(2), Constant(2)])
-    assert function1 == function2
+    assert function1.to_string() == function2.to_string()
 
 def test_remove_nesting_with_variable():
     function1 = remove_nesting(Multiply([Constant(3), Multiply([SimplePower("x", Constant(1)), Constant(2)])]))
     function2 = Multiply([Constant(3), SimplePower("x", Constant(1)), Constant(2)])
-    assert function1 == function2
+    assert function1.to_string() == function2.to_string()
 
 def test_balanced_delimiters_valid():
     function = "2*(x+5)"
