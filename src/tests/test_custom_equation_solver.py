@@ -451,6 +451,7 @@ def test_solve_linear_multi_sum():
     try:
         left_function = Constant(10)
         right_function = Add([Constant(5), Constant(5), Constant(-6), Multiply([Constant(2), SimplePower("x", Constant(1))])])
+        equation = Equation(left_function, right_function)
         solution, steps = equation.solve_linear()
         passed = True
     except:
@@ -464,6 +465,7 @@ def test_solve_linear_multi_product():
     try:
         left_function = Constant(10)
         right_function = Add([Constant(4), Multiply([Constant(5), Constant(4), Constant(0.1), SimplePower("x", Constant(1))])])
+        equation = Equation(left_function, right_function)
         solution, steps = equation.solve_linear()
         passed = True
     except:
