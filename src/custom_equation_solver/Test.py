@@ -951,3 +951,64 @@ def test_balanced_delimiters_foil_method():
     # I am using parse_string, but the part that is tricky involves testing the balanced delimiters
     input = "(x+2)*(x+5)=40"
     assert balanced_delimiters(input)
+
+
+def test_evaluate_multiply_1():
+    function = Multiply([SimplePower('x', 1), Constant(3)])
+    assert function.evaluate(10.5) == 31.5
+
+
+def test_evaluate_multiply_2():
+    function = Multiply([Constant(3), SimplePower("x", Constant(1)), Constant(2)])
+    assert function.evaluate(-3) == -18
+
+
+def test_evaluate_multiply_3():
+    function = Multiply([Constant(3), Constant(2), Constant(2)])
+    assert function.evaluate(-10.3242) == 12
+
+
+def test_evaluate_multiply_4():
+    function = Multiply([SimplePower("x", Constant(2)), Constant(.5)])
+    assert function.evaluate(3) == 4.5
+
+
+def test_remove_nested_multiply_1():
+    function = Multiply([SimplePower("x", Constant(2)), Constant(.5),
+                         Multiply([SimplePower("x", Constant(2)), Constant(.5),
+                                   Multiply([SimplePower("x", Constant(2)), Constant(.5)])])])
+    function.remove_nested_multiply()
+    assert function.to_string() == 'x^2.0*0.5*x^2.0*0.5*x^2.0*0.5'
+
+
+def test_remove_nested_multiply_2():
+    function = Multiply([SimplePower("x", Constant(2)), Constant(.5),
+                         Multiply([SimplePower("x", Constant(2)), Constant(.5),
+                                   Multiply([Constant(1)])])])
+    function.remove_nested_multiply()
+    assert function.to_string() == 'x^2.0*0.5*x^2.0*0.5*1.0'
+
+
+def test_multiply_combine_constants_1():
+    function = Multiply([SimplePower("x", Constant(2)), Constant(.5),
+                         Multiply([SimplePower("x", Constant(2)), Constant(.5),
+                                   Multiply([Constant(1)])])])
+    function.remove_nested_multiply()
+    function.combine_constants()
+    assert function.to_string() == '0.25*x^2.0*x^2.0'
+
+
+def test_multiply_combine_constants_2():
+    function = Multiply([SimplePower("x", Constant(2)), Constant(.5),
+                         Multiply([SimplePower("x", Constant(2)), Constant(.5),
+                                   Multiply([SimplePower("x", Constant(2)), Constant(.5)])])])
+    function.remove_nested_multiply()
+    function.combine_constants()
+    assert function.to_string() == '0.125*x^2.0*x^2.0*x^2.0'
+
+
+def test_multiply_combine_constants_3():
+    function = Multiply([Constant(5), Add([Constant(8), SimplePower('x', Constant(3))]), Constant(10)])
+    function.remove_nested_multiply()
+    function.combine_constants()
+    assert function.to_string() == '50.0*(8.0 + x^3.0)'
