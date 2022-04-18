@@ -11,15 +11,17 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "templates"))
 from equation_solver import solve_equation
 from StaticFunctions import parse_string
 from Equation import Equation
+from sympy import *
 # make a streamlit app
 st.title("Wolfram Omicron Delta - Equation Solver")
 st.write("Enter an equation below to view the solution and steps.")
-
+st.caption("Please use the * for multiplication")
 # make a text input
 equation = st.text_input("Enter your equation here")
 # make a button
 if st.button("Solve"):
     # solve the equation
+    print(equation)
     solution, steps = None, None
     try:
         equation = parse_string(equation)
@@ -28,14 +30,14 @@ if st.button("Solve"):
         elif equation.is_quadratic():
             solution, steps = equation.solve_quadratic()
         else:
-            solution = solve_equation(equation)
+            solution = latex(solve_equation(equation))
             # display the solution
     except:
-        solution = solve_equation(equation)
-    st.markdown("### Solution: " + str(solution))
+        solution = latex(solve_equation(equation))
+    st.latex(solution)
     if steps == None:
         st.markdown("No steps currently supported for this equation")
     else:
         st.markdown("## Steps:")
         for step in steps:
-            st.markdown(step)
+            st.write(step)
