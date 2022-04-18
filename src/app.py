@@ -12,8 +12,8 @@ from equation_solver import solve_equation
 from StaticFunctions import parse_string
 from Equation import Equation
 # make a streamlit app
-st.title("Equation Solver")
-st.write("This is a simple equation solver")
+st.title("Wolfram Omicron Delta - Equation Solver")
+st.write("Enter an equation below to view the solution and steps.")
 
 # make a text input
 equation = st.text_input("Enter your equation here")
