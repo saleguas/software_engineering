@@ -15,7 +15,6 @@ from sympy import *
 # make a streamlit app
 st.title("Wolfram Omicron Delta - Equation Solver")
 st.write("Enter an equation below to view the solution and steps.")
-st.caption("Please use the * for multiplication")
 # make a text input
 equation = st.text_input("Enter your equation here")
 # make a button
@@ -25,6 +24,7 @@ if st.button("Solve"):
     solution, steps = None, None
     try:
         equation = parse_string(equation)
+        print(equation)
         if equation.is_linear():
             solution, steps = equation.solve_linear()
         elif equation.is_quadratic():
@@ -32,7 +32,8 @@ if st.button("Solve"):
         else:
             solution = latex(solve_equation(equation))
             # display the solution
-    except:
+    except Exception as e:
+        print(e)
         solution = latex(solve_equation(equation))
     st.latex(solution)
     if steps == None:
