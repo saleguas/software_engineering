@@ -20,15 +20,18 @@ equation = st.text_input("Enter your equation here")
 # make a button
 if st.button("Solve"):
     # solve the equation
-    equation = parse_string(equation)
     solution, steps = None, None
-    if equation.is_linear():
-        solution, steps = equation.solve_linear()
-    elif equation.is_quadratic():
-        solution, steps = equation.solve_quadratic()
-    else:
+    try:
+        equation = parse_string(equation)
+        if equation.is_linear():
+            solution, steps = equation.solve_linear()
+        elif equation.is_quadratic():
+            solution, steps = equation.solve_quadratic()
+        else:
+            solution = solve_equation(equation)
+            # display the solution
+    except:
         solution = solve_equation(equation)
-        # display the solution
     st.markdown("### Solution: " + str(solution))
     if steps == None:
         st.markdown("No steps currently supported for this equation")
