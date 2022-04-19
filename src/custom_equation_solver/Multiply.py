@@ -1,8 +1,6 @@
 from Function import Function
 from Constant import Constant
-from Variable import Variable
 from SimplePower import SimplePower
-from Exponential import Exponential
 
 
 class Multiply(Function):
@@ -73,7 +71,7 @@ class Multiply(Function):
         self.factors = [factor for factor in self.factors if not isinstance(factor, SimplePower)]
         # Insert new power functions
         for base in power_bases:
-            self.factors.append(SimplePower(base, power_bases[base]))
+            self.factors.append(SimplePower(base, Constant(power_bases[base])))
 
     # Postconditions: constants are multiplied together, and functions
     # are ordered as follows: constant, variable or power (variable if power is 1;
@@ -111,8 +109,13 @@ class Multiply(Function):
 
     def to_string(self):
         string = ""
+        from Add import Add
         for i in range(len(self.factors)):
+            if isinstance(self.factors[i], Add):
+                string += '('
             string += self.factors[i].to_string()
+            if isinstance(self.factors[i], Add):
+                string += ')'
             if i != len(self.factors) - 1:
                 string += "*"
         return string

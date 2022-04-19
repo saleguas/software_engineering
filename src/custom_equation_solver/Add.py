@@ -58,7 +58,7 @@ class Add(Function):
 
         # delete simple power functions and multiply functions with constant * power
         self.addends = [addend for addend in self.addends if not (isinstance(addend, SimplePower) or
-                                                                  (isinstance(addend, Multiply) and (
+                                                                  (isinstance(addend, Multiply) and len(addend.factors) == 2 and (
                                                                           ((isinstance(addend.factors[0], int) or
                                                                             isinstance(addend.factors[0],
                                                                                        float)) and
@@ -72,9 +72,9 @@ class Add(Function):
         # append simplified power functions.
         for term in terms:
             if terms[term] == 1:
-                self.addends.append(SimplePower(term[0], term[1]))
-            else:
-                self.addends.append(Multiply([Constant(terms[term]), SimplePower(term[0], term[1])]))
+                self.addends.append(SimplePower(term[0], Constant(term[1])))
+            elif terms[term] != 0:
+                self.addends.append(Multiply([Constant(terms[term]), SimplePower(term[0], Constant(term[1]))]))
 
     def simplify(self):
         self.combine_like_terms()

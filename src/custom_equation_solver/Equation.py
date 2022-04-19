@@ -15,6 +15,50 @@ class Equation:
     def is_quadratic(self):
         return self.left_function.is_quadratic() and self.right_function.is_quadratic()
 
+    def solve_quadratic(self):
+        steps = []
+
+        # distributive property
+        self.left_function = distribute(self.left_function)
+        self.right_function = distribute(self.right_function)
+        steps.append("If applicable, apply the distributive property, yielding " + self.to_string() + ".")
+        self.left_function = remove_nesting(self.left_function)
+        self.right_function = remove_nesting(self.right_function)
+        self.left_function.simplify()
+        self.right_function.simplify()
+        for i in range(20):
+            self.left_function = distribute(self.left_function)
+            self.right_function = distribute(self.right_function)
+            self.left_function = remove_nesting(self.left_function)
+            self.right_function = remove_nesting(self.right_function)
+            self.left_function.simplify()
+            self.right_function.simplify()
+
+        self.left_function = Add([self.left_function, Multiply([Constant(-1), self.right_function])])
+        self.right_function = Constant(0)
+        steps.append("Move everything to the left side, yielding " + self.left_function.to_string() + " = " + self.right_function.to_string() + ".")
+
+        for i in range(20):
+            self.left_function = distribute(self.left_function)
+            self.left_function = remove_nesting(self.left_function)
+            self.left_function.simplify()
+
+        if isinstance(self.left_function, Add) and len(self.left_function.addends) == 0:
+            self.left_function = Constant(0)
+        steps.append("Simplify: " + self.to_string() + ".")
+        assert self.left_function.is_quadratic()
+        if self.left_function.is_linear():
+            steps.append("This is now a linear equation, so solve it like a linear equation.")
+            solution, linear_steps = self.solve_linear()
+            for step in linear_steps:
+                steps.append(step)
+            return solution, steps
+        a, b, c = get_quadratic_coefficients(self.left_function)
+        solution = ((-b + (b**2-4*a*c)**.5)/(2*a), (-b - (b**2-4*a*c)**.5)/(2*a))
+        steps.append("Use the quadratic formula. The quadratic formula is (-b +- sqrt(b^2-4ac))/(2a) with a=" + str(a) +
+                     ", b=" + str(b) + ", c= " + str(c) + ".")
+        return solution, steps
+
     def is_linear(self):
         return self.left_function.is_linear() and self.right_function.is_linear()
 
@@ -29,20 +73,23 @@ class Equation:
 
         self.left_function = distribute(self.left_function)
         self.right_function = distribute(self.right_function)
-        steps += "If applicable, apply the distributive property, yielding " + self.left_function.to_string() + " = " +\
-                 self.right_function.to_string()
+        steps.append( "If applicable, apply the distributive property, yielding " + self.left_function.to_string() + " = " +\
+                 self.right_function.to_string())
         self.left_function = remove_nesting(self.left_function)
         self.right_function = remove_nesting(self.right_function)
         self.left_function.simplify()
         self.right_function.simplify()
-        self.left_function = remove_nesting(self.left_function)
-        self.right_function = remove_nesting(self.right_function)
-        self.left_function.simplify()
-        self.right_function.simplify()
+        for i in range(20):
+            self.left_function = distribute(self.left_function)
+            self.right_function = distribute(self.right_function)
+            self.left_function = remove_nesting(self.left_function)
+            self.right_function = remove_nesting(self.right_function)
+            self.left_function.simplify()
+            self.right_function.simplify()
         self.left_function = standardize_linear_format(self.left_function)
         self.right_function = standardize_linear_format(self.right_function)
-        steps += "If applicable, simplify, yielding " + self.left_function.to_string() + " = " +\
-                 self.right_function.to_string()
+        steps.append( "If applicable, simplify, yielding " + self.left_function.to_string() + " = " +\
+                 self.right_function.to_string())
 
         # case 1: Both sides are constant
         if isinstance(self.left_function, Constant) and isinstance(self.right_function, Constant):

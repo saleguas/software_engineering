@@ -54,7 +54,7 @@ def remove_nesting(function):
 
 def standardize_linear_format(function):
     if not function.is_linear():
-        return None
+        return function
     if isinstance(function, Add):
         # return Add([standardize_linear_format(addend) for addend in function.addends])
         for i in range(len(function.addends)):
@@ -93,6 +93,8 @@ def balanced_delimiters(input: str) -> bool:
             delimiter_count += 1
         elif c == ")":
             delimiter_count -= 1
+        if delimiter_count < 0:
+            return False
     return delimiter_count == 0
 
 
@@ -102,7 +104,7 @@ def parse_string(input: str):
     uppercase_letters = set(string.ascii_uppercase)
     numbers = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
     letters = lowercase_letters.union(uppercase_letters)
-    allowed_symbols = {'*', '+', '-', '/', '^', '=', '(', ')'}
+    allowed_symbols = {'*', '+', '-', '/', '^', '=', '(', ')', '.'}
     allowed_characters = allowed_symbols.union(letters).union(numbers)
     variable_name = ""
     variable_set = False
@@ -124,6 +126,7 @@ def parse_string(input: str):
     equals_passed = False
     for c in filtered_input:
         if c == "=":
+            assert not equals_passed
             equals_passed = True
         elif not equals_passed:
             left_string += c
@@ -216,3 +219,48 @@ def parse_function(input: str):
             assert False
     # what is left must be a variable
     return SimplePower(Variable(input), Constant(1))
+
+
+def get_quadratic_coefficients(function):
+    a, b, c = 0, 0, 0
+    if isinstance(function, SimplePower):
+        assert function.power == 2
+        a = Constant(1)
+    elif isinstance(function, Multiply):
+        assert len(function.factors) == 2
+        for factor in function.factors:
+            if isinstance(factor, Constant):
+                a = factor
+            else:
+                assert isinstance(factor, SimplePower)
+                assert factor.power == 2
+    else:
+        assert isinstance(function, Add)
+        for addend in function.addends:
+            if isinstance(addend, SimplePower):
+                if addend.power == 1:
+                    b = Constant(1)
+                else:
+                    assert addend.power == 2
+                    a = Constant(1)
+            elif isinstance(addend, Constant):
+                c = addend
+            else:
+                assert isinstance(addend, Multiply)
+                assert len(addend.factors) == 2
+                if isinstance(addend.factors[0], Constant):
+                    assert isinstance(addend.factors[1], SimplePower)
+                    if addend.factors[1].power == 1:
+                        b = addend.factors[0]
+                    else:
+                        assert addend.factors[1].power == 2
+                        a = addend.factors[0]
+                else:
+                    assert isinstance(addend.factors[0], SimplePower)
+                    assert isinstance(addend.factors[1], Constant)
+                    if addend.factors[0].power == 1:
+                        b = addend.factors[1]
+                    else:
+                        assert addend.factors[0].power == 2
+                        a = addend.factors[1]
+    return a, b, c
