@@ -148,7 +148,7 @@ class Equation:
                     return False, ["ERROR"]
             right_side_1 = self.right_function - constant
             right_side_2 = right_side_1/slope
-            steps = ["Subtract " + constant.to_string() + " from both sides of the equation, yielding " +
+            steps += ["Subtract " + constant.to_string() + " from both sides of the equation, yielding " +
                      self.left_function.to_string() + " - " + constant.to_string() + " = " +
                      self.right_function.to_string() + " - " + constant.to_string() + ".",
                      "Simplify: " + slope.to_string() + "*" + variable.to_string() + " = " + str(right_side_1) + ".",
@@ -204,13 +204,13 @@ class Equation:
             left_side_2 = Multiply([slope_difference, variable_right])
             right_side_2 = constant_difference
 
-            steps = ["Subtract " + slope_right.to_string() + "*" + variable_right + " from both sides of the equation, yielding " +
+            steps += ["Subtract " + slope_right.to_string() + "*" + variable_right + " from both sides of the equation, yielding " +
                      self.left_function.to_string() + " - " + slope_right.to_string() + "*" + variable_right + " = " +
                      self.right_function.to_string() + " - " + slope_right.to_string() + "*" + variable_right + ".",
                      "Simplify: " + left_side_1.to_string() + " = " + str(right_side_1) + ".",
                      "Subtract " + str(constant_left) + " from both side of the equation, yielding " +
                      left_side_1.to_string() + " - " + str(constant_left) + " = " + right_side_1.to_string() + " - " +
-                     str(constant_right) + ".",
+                     str(constant_left) + ".",
                      "Simplify: " + left_side_2.to_string() + " = " + right_side_2.to_string() + ".",
                      "Divide both sides by " + str(slope_difference) + ": " +
                      "(" + slope_difference.to_string() + variable_right.to_string() + ")/" + slope_difference.to_string() + " = " +

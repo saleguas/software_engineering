@@ -138,6 +138,7 @@ def parse_string(input: str):
 
 
 def parse_function(input: str):
+    special_symbols = {'*', '+', '-', '/', '^', '=', '('}
     assert len(input) >= 1
     # remove unnecessary parentheses surround the whole string
     if input[0] == '(' and input[len(input) - 1] == ')' and balanced_delimiters(input[1:len(input) - 1]):
@@ -154,7 +155,8 @@ def parse_function(input: str):
         elif input[i] == "+" and delimiter_count == 0:
             addition_indexes.append([i, True])
         # make sure this is subtraction and not negative sign
-        elif input[i] == "-" and delimiter_count == 0 and i >= 1 and not input[i - 1].isnumeric():
+        ##########
+        elif input[i] == "-" and delimiter_count == 0 and i >= 1 and not input[i - 1] in special_symbols:
             addition_indexes.append([i, False])
     assert delimiter_count == 0
     # check for multiplication and division
@@ -183,30 +185,31 @@ def parse_function(input: str):
         return Constant(float(input))
     # separate by addition and subtraction if applicable
     elif len(addition_indexes) > 0:
-        addends_string = []
-        previous_index = -1
-        for index_array in addition_indexes:
-            addend = input[previous_index + 1:index_array[0]]
+        addends_string = [input[0:addition_indexes[0][0]]]
+        for i in range(len(addition_indexes)):
+            end_of_term = len(input)
+            if i + 1 != len(addition_indexes):
+                end_of_term = addition_indexes[i+1][0]
+            addend = input[addition_indexes[i][0]+1:end_of_term]
             assert len(addend) != 0
-            previous_index = index_array[0]
-            if not index_array[1]:
+            if not addition_indexes[i][1]:
                 addend = '-' + addend
             addends_string.append(addend)
-        addends_string.append(input[previous_index + 1:len(input)])
+
         addend_functions = [parse_function(add) for add in addends_string]
         return Add([add for add in addend_functions])
     # separate by multiplication and division if applicable
     elif len(multiplication_indexes) > 0:
-        factors_string = []
-        previous_index = -1
-        for index_array in multiplication_indexes:
-            factor = input[previous_index + 1:index_array[0]]
+        factors_string = [input[0:multiplication_indexes[0][0]]]
+        for i in range(len(multiplication_indexes)):
+            end_of_term = len(input)
+            if i + 1 != len(multiplication_indexes):
+                end_of_term = multiplication_indexes[i+1][0]
+            factor = input[multiplication_indexes[i][0] + 1:end_of_term]
             assert len(factor) != 0
-            previous_index = index_array[0]
-            if not index_array[1]:
+            if not multiplication_indexes[i][1]:
                 factor = '-' + factor
             factors_string.append(factor)
-        factors_string.append(input[previous_index + 1:len(input)])
         multiply_functions = [parse_function(f) for f in factors_string]
         return Multiply([m for m in multiply_functions])
     # find exponents
