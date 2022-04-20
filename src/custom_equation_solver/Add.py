@@ -5,19 +5,49 @@ from Constant import Constant
 
 
 class Add(Function):
+    """
+    A class to represent addition of functions
+
+    ...
+    Attributes
+    ----------
+    addends : list
+        store addends
+
+    Methods
+    -------
+    __init__(addends):
+        initialize the equation with a left function and a right function
+    evaluate(x):
+        evaluate the function at a given point
+    combine_like_terms():
+        combine like terms
+    simplify():
+        simplify addends by combining like terms, removing zeros, and calling simplify on products
+    is_quadratic():
+        check whether the function is quadratic
+    is_linear():
+        check whether the function is linear
+    to_string():
+        return the string representation of the function
+    """
+
     def __init__(self, addends=None):
+        """initialize addends to the input; make addends None otherwise"""
         if not isinstance(addends, list):
             self.addends = []
         else:
             self.addends = addends
 
     def evaluate(self, x: float):
+        """return the value of the function at a given point, x"""
         sum = 0
         for f in self.addends:
             sum += f.evaluate(x)
         return sum
 
     def combine_like_terms(self):
+        """modify addends to combine like terms"""
         # combine constants
         constants = []
         for addend in self.addends:
@@ -77,6 +107,7 @@ class Add(Function):
                 self.addends.append(Multiply([Constant(terms[term]), SimplePower(term[0], Constant(term[1]))]))
 
     def simplify(self):
+        """simplify addends by combining like terms, removing zeros, and calling simplify on products"""
         self.combine_like_terms()
 
         self.addends = [a for a in self.addends if a != 0]
@@ -85,21 +116,22 @@ class Add(Function):
             if isinstance(addend, Multiply):
                 addend.simplify()
 
-    # An add function is linear if each term is constant or a multiply times a simple power with power 1
-    # Multiply functions must be simplified
     def is_linear(self):
+        """return whether each addend is linear"""
         for addend in self.addends:
             if not addend.is_linear():
                 return False
         return True
 
     def is_quadratic(self):
+        """return whether each addend is quadratic"""
         for addend in self.addends:
             if not addend.is_quadratic():
                 return False
         return True
 
     def to_string(self):
+        """return the string representation of the sum"""
         string = ""
         for i in range(len(self.addends)):
             string += self.addends[i].to_string()

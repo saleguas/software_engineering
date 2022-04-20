@@ -4,11 +4,12 @@ from Multiply import Multiply
 from Add import Add
 from Constant import Constant
 from SimplePower import SimplePower
-# from Equation import Equation
 from Variable import Variable
 
 
 def distribute(function):
+    """return the version of function with the distributive property applied"""
+    # if this is a multiply function, find the add functions and multiply the other factors with each addend
     if isinstance(function, Multiply):
         for factor in function.factors:
             if isinstance(factor, Add):
@@ -19,7 +20,9 @@ def distribute(function):
                     new_factors.append(addend)
                     new_multiply = Multiply(new_factors)
                     new_addends.append(new_multiply)
+                # use recursion to ensure everything is distributed
                 return distribute(Add(new_addends))
+    # if function is of type Add, recursively apply distribute
     elif isinstance(function, Add):
         for i in range(len(function.addends)):
             function.addends[i] = distribute(function.addends[i])
@@ -27,16 +30,21 @@ def distribute(function):
 
 
 def remove_nesting(function):
+    """remove nested multiply and add functions"""
     if isinstance(function, Multiply):
+        # remove Multiply classification if there is only one "factor"
         if len(function.factors) == 1:
             return function.factors[0]
+        # remove nesting of each factor
         else:
             for i in range(len(function.factors)):
                 function.factors[i] = remove_nesting(function.factors[i])
     if isinstance(function, Add):
+        # remove Add classification is there is only one "addend"
         if len(function.addends) == 1:
             return function.addends[0]
         else:
+            # remove nesting of each addend
             for i in range(len(function.addends)):
                 function.addends[i] = remove_nesting(function.addends[i])
             for i in range(len(function.addends)):
@@ -53,6 +61,7 @@ def remove_nesting(function):
 
 
 def standardize_linear_format(function):
+    """return rewritten function in the form ax+b=cx+d"""
     if not function.is_linear():
         return function
     if isinstance(function, Add):
@@ -70,15 +79,8 @@ def standardize_linear_format(function):
     return function
 
 
-# def is_float(input: str):
-#     # no double negatives allowed
-#     negative = False
-#     for i in range(len(input)):
-#         if input[i] == "-" and i != 0:
-#             return False
-
-
 def is_float(number: str) -> bool:
+    """return whether number is a valid float"""
     try:
         float(number)
         return True
@@ -87,6 +89,7 @@ def is_float(number: str) -> bool:
 
 
 def balanced_delimiters(input: str) -> bool:
+    """return whether input has balanced parentheses and no hanging closed parentheses"""
     delimiter_count = 0
     for c in input:
         if c == "(":
@@ -99,6 +102,7 @@ def balanced_delimiters(input: str) -> bool:
 
 
 def parse_string(input: str):
+    """return input converted to Equation"""
     # don't filter numbers
     lowercase_letters = set(string.ascii_lowercase)
     uppercase_letters = set(string.ascii_uppercase)
@@ -138,6 +142,7 @@ def parse_string(input: str):
 
 
 def parse_function(input: str):
+    """return input converted to Function"""
     special_symbols = {'*', '+', '-', '/', '^', '=', '('}
     assert len(input) >= 1
     # remove unnecessary parentheses surround the whole string
@@ -225,6 +230,9 @@ def parse_function(input: str):
 
 
 def get_quadratic_coefficients(function):
+    """Return the coefficients of each of the terms in a quadratic function.
+    The first return value is the quadratic coefficient, the second is the linear coefficient, and the third is
+    the constant"""
     a, b, c = 0, 0, 0
     if isinstance(function, SimplePower):
         assert function.power == 2

@@ -3,7 +3,29 @@ from Variable import Variable
 
 
 class Power(Function):
-    def __init__(self, base: Function, power):
+    """
+    A class to represent functions raised to any functional power
+
+    ...
+    Attributes
+    ----------
+    base: Function
+        the base
+    power: Function
+        the exponent
+
+    Methods
+    -------
+    __init__(base, power):
+        initialize the function with a base and exponent
+    evaluate(x):
+        evaluate the function at a given point
+    is_linear():
+        check whether the function is linear
+    to_string():
+        return the string representation of the function
+    """
+    def __init__(self, base: Function, power: Function):
         self.base = base
         self.power = power
 

@@ -1,26 +1,24 @@
 from abc import ABC
 
 
-"""def distribute(function):
-    if isinstance(function, Multiply):
-        for factor in function.factors:
-            if isinstance(factor, Add):
-                other_factors = [f for f in function.factors if f != factor]
-                new_addends = []
-                for addend in factor.addends:
-                    new_factors = other_factors
-                    new_factors.append(addend)
-                    new_multiply = Multiply(new_factors)
-                    new_addends.append(new_multiply)
-                return distribute(Add(new_addends))
-    elif isinstance(function, Add):
-        for addend in function.addends:
-            return distribute(addend)"""
-
-
 class Function(ABC):
-    # var = ""
+    """
+    An abstract base class that various types of functions derive
 
+    ...
+    Methods
+    -------
+    evaluate(x):
+        return the function evaluated at the given point
+    is_quadratic():
+        indicate whether the function is quadratic
+    is_linear():
+        indicate whether the function is linear
+    to_string():
+        return the string representation of the function
+    simplify():
+        modify attributes to simplify the function
+    """
     def evaluate(self, x: float):
         pass
 
