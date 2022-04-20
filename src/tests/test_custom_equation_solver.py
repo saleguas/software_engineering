@@ -484,21 +484,6 @@ def test_to_string_2():
     assert equation.to_string() == "17.0 = 5.0*x + 7.0"
 
 
-def test_solve_1():
-    left_function = Constant(10)
-    right_function = Add([Constant(4), Multiply([Constant(2), SimplePower("x", Constant(2))])])
-    equation = Equation(left_function, right_function)
-    assert equation.solve(SimplePower("x", Constant(1))) == None
-
-
-def test_solve_2():
-    left_function = Constant(10)
-    right_function = Add([Constant(4), Multiply([Constant(2), SimplePower("x", Constant(1))])])
-    equation = Equation(left_function, right_function)
-    solution, steps = equation.solve(SimplePower("x", Constant(1)))
-    assert solution == 3
-
-
 def test_solve_linear_multi_sum():
     passed = None
     solution = None

@@ -154,6 +154,15 @@ def test_parse_string_1():
     assert True
 
 
+def test_parse_string_():
+    test_input = "3*x*2 = 5"
+    parsed_function = parse_string(test_input)
+    # assert parsed_function.is_linear()
+    solution, steps = parsed_function.solve_linear()
+    assert solution == 5/6
+    assert True
+
+
 def test_parse_function_works_with_parentheses():
     passed = None
     solution = None
@@ -476,21 +485,6 @@ def test_to_string_2():
     right_function = Add([Multiply([Constant(5), SimplePower("x", Constant(1))]), Constant(7)])
     equation = Equation(left_function, right_function)
     assert equation.to_string() == "17.0 = 5.0*x + 7.0"
-
-
-def test_solve_1():
-    left_function = Constant(10)
-    right_function = Add([Constant(4), Multiply([Constant(2), SimplePower("x", Constant(2))])])
-    equation = Equation(left_function, right_function)
-    assert equation.solve(SimplePower("x", Constant(1))) == None
-
-
-def test_solve_2():
-    left_function = Constant(10)
-    right_function = Add([Constant(4), Multiply([Constant(2), SimplePower("x", Constant(1))])])
-    equation = Equation(left_function, right_function)
-    solution, steps = equation.solve(SimplePower("x", Constant(1)))
-    assert solution == 3
 
 
 def test_solve_linear_multi_sum():
@@ -1012,3 +1006,24 @@ def test_multiply_combine_constants_3():
     function.remove_nested_multiply()
     function.combine_constants()
     assert function.to_string() == '50.0*(8.0 + x^3.0)'
+
+def test_parse_string_additional_1():
+    input_string = "2*(x+x+x-3.1*x) = 8*(5*x)-3*x+5"
+    equ = parse_string(input_string)
+    solution, steps = equ.solve_linear()
+    assert -.1345 < solution < -.1344
+
+
+def test_parse_string_additional_2():
+    input_string = "2*(x+x+x+3.1*x) = 8*(5*x)+3*x+5"
+    equ = parse_string(input_string)
+    solution, steps = equ.solve_linear()
+    assert -.1624 < solution < -.1623
+
+
+def test_parse_string_additional_3():
+    input_string = "-2*x^2-3*x-8 = -17-85*x-10*x^2"
+    equ = parse_string(input_string)
+    solution, steps = equ.solve_quadratic()
+    assert -10.14 < solution[1] < -10.139
+    assert -.111 < solution[0] < -.1109
