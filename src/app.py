@@ -46,7 +46,7 @@ if st.button("Solve"):
             # display the solution
     except Exception as e:
         print(e)
-        solution = latex(solve_equation(equation))
+        solution = latex(solve_equation(in_equation))
     st.latex(solution)
     if steps == None:
         st.markdown("No steps currently supported for this equation")
