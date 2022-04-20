@@ -160,6 +160,15 @@ def test_parse_string_1():
     assert True
 
 
+def test_parse_string_():
+    test_input = "3*x*2 = 5"
+    parsed_function = parse_string(test_input)
+    # assert parsed_function.is_linear()
+    solution, steps = parsed_function.solve_linear()
+    assert solution == 5/6
+    assert True
+
+
 def test_parse_function_works_with_parentheses():
     passed = None
     solution = None
@@ -1003,3 +1012,24 @@ def test_multiply_combine_constants_3():
     function.remove_nested_multiply()
     function.combine_constants()
     assert function.to_string() == '50.0*(8.0 + x^3.0)'
+
+def test_parse_string_additional_1():
+    input_string = "2*(x+x+x-3.1*x) = 8*(5*x)-3*x+5"
+    equ = parse_string(input_string)
+    solution, steps = equ.solve_linear()
+    assert -.1345 < solution < -.1344
+
+
+def test_parse_string_additional_2():
+    input_string = "2*(x+x+x+3.1*x) = 8*(5*x)+3*x+5"
+    equ = parse_string(input_string)
+    solution, steps = equ.solve_linear()
+    assert -.1624 < solution < -.1623
+
+
+def test_parse_string_additional_3():
+    input_string = "-2*x^2-3*x-8 = -17-85*x-10*x^2"
+    equ = parse_string(input_string)
+    solution, steps = equ.solve_quadratic()
+    assert -10.14 < solution[1] < -10.139
+    assert -.111 < solution[0] < -.1109
